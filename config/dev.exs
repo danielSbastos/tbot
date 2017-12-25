@@ -1,5 +1,7 @@
 use Mix.Config
 
+import_config "env.local.exs"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
@@ -47,6 +49,10 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+config :tbot,
+  messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN"),
+  messenger_app_id: System.get_env("MESSENGER_APP_ID")
 
 # Configure your database
 config :tbot, Tbot.Repo,
