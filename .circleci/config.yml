@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/tbot
+    docker:
+      - image: elixir:1.5.2
+        environment:
+          MESSENGER_PAGE_TOKEN: does_not_matter_in_test_env
+          MESSENGER_PAGE_ID: also_does_not_matter_in_test_env
+      - image: postgres:9.4.1
+        environment:
+          POSTGRES_USER: ubuntu
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar
+      - run: mix deps.get
+      - run: mix ecto.create
+      - run: mix test
