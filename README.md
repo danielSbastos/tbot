@@ -1,7 +1,5 @@
 # Tbot
 
-### Bot written in Elixir with Phantom as a framework for learning purposes
-
 - [Dependencies](#dependencies)
 - [Setup](#setup)
 - [Development](#development)
@@ -28,7 +26,7 @@ $ mix deps.get
 $ mix ecto.create
 ```
 
-# Developemnt
+## Developemnt
 
 **Note:** before executing any command that uses the environment variables in development mode, the following command must be executed:
 
@@ -42,7 +40,7 @@ To start the server:
 $ mix phx.server
 ```
 
-# Tests
+## Tests
 
 ```sh
 $ mix test
