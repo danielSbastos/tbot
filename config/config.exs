@@ -7,8 +7,6 @@ use Mix.Config
 
 # General application configuration
 config :tbot,
-  messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN"),
-  messenger_app_id: System.get_env("MESSENGER_APP_ID"),
   ecto_repos: [Tbot.Repo]
 
 # Configures the endpoint

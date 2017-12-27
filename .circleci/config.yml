@@ -7,6 +7,7 @@ jobs:
         environment:
           MESSENGER_PAGE_TOKEN: does_not_matter_in_test_env
           MESSENGER_PAGE_ID: also_does_not_matter_in_test_env
+          MESSENGER_VERIFY_TOKEN: yup_like_the_previous_ones
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
