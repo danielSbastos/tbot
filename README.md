@@ -35,12 +35,6 @@ $ mix ecto.create
 
 ## Developemnt
 
-**Note:** before executing any command that uses the environment variables in development mode, the following command must be executed:
-
-```sh
-$ touch .env
-```
-
 To start the server:
 
 ```sh
