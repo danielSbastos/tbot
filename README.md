@@ -13,8 +13,15 @@
 
 ## Setup
 
-```sh
-$ cp .env.example .env
+Create the following file to store tokens for development environments, `tbot/config/dev.secret.exs`, and add the contents below:
+
+```ex
+use Mix.Config
+
+config :tbot,
+  messenger_verify_token: "your_messenger_verify_token",
+  messenger_app_id: "your_messenger_app_id",
+  messenger_page_token: "your_messenger_page_token"
 ```
 
 Install hex package manager and rebar, install missing dependencies and create the storage for the repo
@@ -27,12 +34,6 @@ $ mix ecto.create
 ```
 
 ## Developemnt
-
-**Note:** before executing any command that uses the environment variables in development mode, the following command must be executed:
-
-```sh
-$ touch .env
-```
 
 To start the server:
 
