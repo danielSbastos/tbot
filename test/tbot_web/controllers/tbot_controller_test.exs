@@ -4,9 +4,9 @@ defmodule TbotWeb.PageControllerTest do
   test "GET /bot with correct verify token returns challenge token and 200", %{conn: conn} do
     test_conn = conn
     |> put_req_header("accept", "application/json")
-    |> get("/bot", %{"hub.mode" => "subscribe", "hub.verify_token" => corrent_verify_token, "hub.challenge" => "blabla"})
+    |> get("/bot", %{"hub.mode" => "subscribe", "hub.verify_token" => correct_verify_token, "hub.challenge" => "blabla"})
 
-    assert test_conn.resp_body == corrent_verify_token
+    assert test_conn.resp_body == correct_verify_token
     assert test_conn.status == 200
   end
 
