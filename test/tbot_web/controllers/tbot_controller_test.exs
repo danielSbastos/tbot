@@ -28,6 +28,6 @@ defmodule TbotWeb.PageControllerTest do
     assert test_conn.status == 500
   end
 
-  defp corrent_verify_token, do: Application.get_env(:tbot, :messenger_verify_token)
+  defp correct_verify_token, do: Application.get_env(:tbot, :messenger_verify_token)
   defp incorrent_verify_token, do: "não consegue, né, moisés"
 end
