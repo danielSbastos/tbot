@@ -9,5 +9,6 @@ defmodule TbotWeb.Router do
     pipe_through :messenger
 
     get "/bot", TbotController, :challenge
+    post "/bot", TbotController, :webhook
   end
 end
