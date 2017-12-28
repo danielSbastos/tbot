@@ -60,18 +60,18 @@ defmodule TbotWeb.PageControllerTest do
     %{
       "object" => "page",
       "entry" => [%{
-          "id" => "1231930516917414",
-          "time" => "1500408432080",
-          "messaging" => [%{
-              "sender" => %{"id" => sender_id},
-              "recipient" => %{"id" => "1231930516917414"},
-              "timestamp" => "1500408431958",
-              "message" => %{
-                  "mid" => "mid.$cAAQ6nOh9tL9jiJUNVldV0_Eirk_R",
-                  "seq" => "30259",
-                  "text" => text,
-              }
-          }]
+        "id" => "1231930516917414",
+        "time" => "1500408432080",
+        "messaging" => [%{
+          "sender" => %{"id" => sender_id},
+          "recipient" => %{"id" => "1231930516917414"},
+          "timestamp" => "1500408431958",
+          "message" => %{
+            "mid" => "mid.$cAAQ6nOh9tL9jiJUNVldV0_Eirk_R",
+            "seq" => "30259",
+            "text" => text,
+          }
+        }]
       }]
     }
   end

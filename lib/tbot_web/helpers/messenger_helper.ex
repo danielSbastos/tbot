@@ -5,6 +5,7 @@ defmodule Tbot.MessengerHelper do
     %{"text": text, "sender_id": sender_id}
   end
 
+  # TODO: Take into consideration that a user may not send a text
   defp parse_message_key(msg) do
     parse_messaging_key(msg)
     |> hd |> Map.get("message") |> Map.get("text")
