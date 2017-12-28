@@ -19,3 +19,7 @@ jobs:
       - run: mix deps.get
       - run: mix ecto.create
       - run: mix test
+      - run: sudo apt-get install ruby-full cmake
+      - run: sudo gem install pronto-credo --no-document
+      - run: echo 'export PRONTO_PULL_REQUEST_ID=$CIRCLE_PR_NUMBER' >> $BASH_ENV
+      - run: if [ $PRONTO_PULL_REQUEST_ID != false ]; then pronto run -f github_pr -c origin/master; fi
