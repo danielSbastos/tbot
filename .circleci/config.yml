@@ -24,13 +24,16 @@ jobs:
   "ruby":
     docker:
       - image: circleci/ruby:2.4
+        environment:
+          MIX_ENV: test
+          PULL_REQUEST_ID: $CI_PULL_REQUEST
     working_directory: ~/tbot
     steps:
       - checkout
-      - run: sudo apt-get install cmake
+      - run: sudo apt-get install cmake ruby-full
+      - run: gem install bummr -v 0.1.6 --no-document
       - run: gem install pronto-credo --no-document
-      - run: echo 'export PRONTO_PULL_REQUEST_ID=$CIRCLE_PR_NUMBER' >> $BASH_ENV
-      - run: if [ $PRONTO_PULL_REQUEST_ID != false ]; then pronto run -f github_pr -c origin/master; fi
+      - run: if [ "$PRONTO_PULL_REQUEST_ID" != false ]; then pronto run -f github_pr -c origin/master; fi
 
 workflows:
   version: 2
