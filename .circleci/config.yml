@@ -1,7 +1,7 @@
 version: 2
+
 jobs:
-  build:
-    working_directory: ~/tbot
+  "elixir":
     docker:
       - image: elixir:1.5.2
         environment:
@@ -12,6 +12,7 @@ jobs:
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
+    working_directory: ~/tbot
     steps:
       - checkout
       - run: mix local.hex --force
@@ -19,8 +20,21 @@ jobs:
       - run: mix deps.get
       - run: mix ecto.create
       - run: mix test
-      - run: apt-get install ruby-full
+
+  "ruby":
+    docker:
+      - image: circleci/ruby:2.4
+    working_directory: ~/tbot
+    steps:
+      - checkout
+      - run: sudo apt-get install cmake
       - run: gem install pronto-credo --no-document
-      # Env. variable needed to run pronto
       - run: echo 'export PRONTO_PULL_REQUEST_ID=$CIRCLE_PR_NUMBER' >> $BASH_ENV
       - run: if [ $PRONTO_PULL_REQUEST_ID != false ]; then pronto run -f github_pr -c origin/master; fi
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - elixir
+      - ruby
