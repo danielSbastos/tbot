@@ -1,9 +1,14 @@
+[![Codebeat](https://codebeat.co/badges/42c9fe03-e8ba-469e-8b14-3282f5361b83)](https://codebeat.co/projects/github-com-danielsbastos-tbot-master)
+[![CircleCI](https://circleci.com/gh/danielSbastos/tbot/tree/master.svg?style=shield&circle-token=350e60ec92fa8686df6b34c07242545a7d7a1e15)](https://circleci.com/gh/danielSbastos/tbot/tree/master)
+
+
 # Tbot
 
 - [Dependencies](#dependencies)
 - [Setup](#setup)
 - [Development](#development)
 - [Tests](#tests)
+- [Code Quality](#code_quality)
 
 
 ## Dependencies
@@ -45,4 +50,12 @@ $ mix phx.server
 
 ```sh
 $ mix test
+```
+
+## Code Quality
+
+Code lintage and quality analysis is done via [credo](https://github.com/rrrene/credo). To execute it, write the command below:
+
+```sh
+$ mix credo
 ```
