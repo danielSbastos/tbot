@@ -1,7 +1,7 @@
 version: 2
-
 jobs:
-  "elixir":
+  build:
+    working_directory: ~/tbot
     docker:
       - image: elixir:1.5.2
         environment:
@@ -12,7 +12,6 @@ jobs:
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
-    working_directory: ~/tbot
     steps:
       - checkout
       - run: mix local.hex --force
@@ -20,24 +19,4 @@ jobs:
       - run: mix deps.get
       - run: mix ecto.create
       - run: mix test
-
-  "ruby":
-    docker:
-      - image: circleci/ruby:2.4
-        environment:
-          MIX_ENV: test
-          PULL_REQUEST_ID: $CI_PULL_REQUEST
-    working_directory: ~/tbot
-    steps:
-      - checkout
-      - run: sudo apt-get install cmake ruby-full
-      - run: gem install bummr -v 0.1.6 --no-document
-      - run: gem install pronto-credo --no-document
-      - run: if [ "$PRONTO_PULL_REQUEST_ID" != false ]; then pronto run -f github_pr -c origin/master; fi
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - elixir
-      - ruby
+      - run: mix credo
