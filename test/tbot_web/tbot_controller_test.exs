@@ -1,5 +1,6 @@
-defmodule TbotWeb.PageControllerTest do
-  use TbotWeb.ConnCase
+defmodule TbotWeb.TbotControllerTest do
+  use TbotWeb.ConnCase, async: false
+  import Mock
 
   test "GET /bot with correct verify token returns challenge token and 200", %{conn: conn} do
     test_conn = conn
@@ -15,7 +16,6 @@ defmodule TbotWeb.PageControllerTest do
     |> put_req_header("accept", "application/json")
     |> get("/bot", %{"hub.mode" => "subscribe", "hub.verify_token" => incorrent_verify_token, "hub.challenge" => "blabla"})
 
-    assert test_conn.resp_body == nil
     assert test_conn.status == 500
   end
 
@@ -24,18 +24,18 @@ defmodule TbotWeb.PageControllerTest do
     |> put_req_header("accept", "application/json")
     |> get("/bot", %{})
 
-    assert test_conn.resp_body == nil
     assert test_conn.status == 500
   end
 
   test "POST /bot with 'object': 'page' returns 200 and body", %{conn: conn} do
-    [sender_id | text] = ["123456", "blabla"]
-    test_conn = conn
-    |> put_req_header("accept", "application/json")
-    |> post("/bot", stub_post_messenger(sender_id, text))
+    with_mock HTTPotion, [post: fn(_url, _headers_and_body) -> "ok" end] do
+      [sender_id | text] = ["123456", "blabla"]
+      test_conn = conn
+      |> put_req_header("accept", "application/json")
+      |> post("/bot", stub_post_messenger(sender_id, text))
 
-    assert test_conn.resp_body == Poison.encode!(%{"text" => text, "sender_id" => sender_id})
-    assert test_conn.status == 200
+      assert test_conn.status == 200
+    end
   end
 
   test "POST /bot without 'object': 'page' returns 500", %{conn: conn} do
