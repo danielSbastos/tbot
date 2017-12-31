@@ -9,7 +9,7 @@ defmodule TbotWeb.TbotMessengerOutputTest do
 
     request_body = build_request_body(message_map)
 
-    assert request_body == %{messaging_type: "RESPONSE", message: text, recipient_id: sender_id}
+    assert request_body == %{message: %{text: text}, recipient: %{id: sender_id}}
   end
 
   test "'build_request_body' raises error if wrong map is passed" do
@@ -30,7 +30,7 @@ defmodule TbotWeb.TbotMessengerOutputTest do
 
       assert called HTTPotion.post(
         "https://graph.facebook.com/v2.6/me/messages?access_token=" <> messenger_page_token,
-        [body: Poison.encode!(request_body), headers: ["Accept": "Application/json"]]
+        body: Poison.encode!(request_body), headers: ["Content-Type": "application/json"]
       )
     end
   end

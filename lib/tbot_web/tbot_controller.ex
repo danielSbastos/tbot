@@ -21,7 +21,7 @@ defmodule TbotWeb.TbotController do
     body = build_request_body(parsed_entry)
     send(body)
 
-    conn |> put_status(200)
+    conn |> send_resp(200, "ok")
   end
   def webhook(conn, _),  do: conn |> put_status(500)
 
