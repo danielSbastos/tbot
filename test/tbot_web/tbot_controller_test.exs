@@ -1,5 +1,6 @@
 defmodule TbotWeb.TbotControllerTest do
-  use TbotWeb.ConnCase, async: false
+  use TbotWeb.ConnCase
+
   import Mock
 
   test "GET /bot with correct verify token returns challenge token and 200", %{conn: conn} do

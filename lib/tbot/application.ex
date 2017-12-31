@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Design.AliasUsage
 # credo:disable-for-next-line Credo.Check.Readability.ModuleDoc
 defmodule Tbot.Application do
   use Application
