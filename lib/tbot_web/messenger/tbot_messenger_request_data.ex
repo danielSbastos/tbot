@@ -1,7 +1,6 @@
 defmodule Tbot.MessengerRequestData do
   @moduledoc """
-  Struct that holds the sent message from the Messenger's user, its
-  type (quick reply, postback or text) and the their sender_id
+  Struct that holds the POST request body sent to Messenger
   """
   defstruct message: nil, type: nil, sender_id: nil
 end

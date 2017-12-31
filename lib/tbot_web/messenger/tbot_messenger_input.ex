@@ -1,7 +1,8 @@
 defmodule Tbot.MessengerInput do
   alias Tbot.MessengerRequestData, as: MessengerRequestData
+
   @moduledoc """
-  Input module that parses incoming the "entry" key from messenger JSON POST body request
+  Input module that parses the incoming "entry" key from messenger JSON POST body request
   and returns the user sender_id, the message and its type text when 'parse_messenger_entry'
   is called.
   - Below: a sample POST request from messenger. The method 'parse_messenger_entry'
