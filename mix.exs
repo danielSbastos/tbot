@@ -20,7 +20,7 @@ defmodule Tbot.Mixfile do
   def application do
     [
       mod: {Tbot.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpotion]
     ]
   end
 
@@ -41,7 +41,9 @@ defmodule Tbot.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false}
+      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:httpotion, "~> 3.0.2"},
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 
