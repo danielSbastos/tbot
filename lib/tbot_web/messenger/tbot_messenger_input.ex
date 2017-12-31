@@ -1,6 +1,8 @@
-defmodule Tbot.MessengerHelper do
+defmodule Tbot.MessengerInput do
+  alias Tbot.MessengerRequestData, as: MessengerRequestData
+
   @moduledoc """
-  Helper that parses incoming the "entry" key from messenger JSON POST body request
+  Input module that parses the incoming "entry" key from messenger JSON POST body request
   and returns the user sender_id, the message and its type text when 'parse_messenger_entry'
   is called.
   - Below: a sample POST request from messenger. The method 'parse_messenger_entry'
@@ -25,9 +27,9 @@ defmodule Tbot.MessengerHelper do
   """
 
   def parse_messenger_entry(entry) do
-    message  = parse_message_key(entry)
-    sender  = parse_sender_key(entry)
-    Map.merge(sender, message)
+    message = parse_message_key(entry)
+    sender = parse_sender_key(entry)
+    Map.merge(message, sender, fn _k, v1, v2 ->  v2 || v1 end)
   end
 
   defp parse_message_key(msg) do
@@ -36,7 +38,7 @@ defmodule Tbot.MessengerHelper do
   end
 
   defp define_message_type(%{"mid" => _, "seq" => _, "text" => text}) do
-    %{message: text, type: "text"}
+    msg_data = %MessengerRequestData{message: text, type: "text"}
   end
 
   defp parse_sender_key(msg) do
@@ -45,7 +47,7 @@ defmodule Tbot.MessengerHelper do
     |> hd
     |> Map.get("sender")
     |> Map.get("id")
-    %{sender_id: sender_id}
+    msg_data = %MessengerRequestData{sender_id: sender_id}
   end
 
   defp parse_messaging_key(msgn), do: msgn |> hd |>  Map.get("messaging")

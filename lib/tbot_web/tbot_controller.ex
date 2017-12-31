@@ -1,7 +1,8 @@
 defmodule TbotWeb.TbotController do
   use TbotWeb, :controller
-  import Tbot.MessengerHelper
-  import Tbot.MessengerOutput
+
+  alias Tbot.MessengerInput, as: MessengerInput
+  alias Tbot.MessengerOutput, as: MessengerOutput
 
   def challenge(conn,
     %{"hub.mode" => "subscribe", "hub.verify_token" => token, "hub.challenge" => challenge}) do
@@ -14,12 +15,11 @@ defmodule TbotWeb.TbotController do
   def challenge(conn, _), do: conn |> put_status(500)
 
   def webhook(conn, %{"entry" => entry, "object" => "page"}) do
-    # TODO: Transform POST body as "struct"
-    parsed_entry = parse_messenger_entry(entry)
+    parsed_entry = MessengerInput.parse_messenger_entry(entry)
 
     # TODO: Send response in a "Task"
-    body = build_request_body(parsed_entry)
-    send(body)
+    body = MessengerOutput.build_request_body(parsed_entry)
+    MessengerOutput.send(body)
 
     conn |> send_resp(200, "ok")
   end

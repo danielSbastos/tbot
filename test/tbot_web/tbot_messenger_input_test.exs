@@ -1,12 +1,15 @@
-defmodule TbotWeb.TbotHelperTest do
+defmodule TbotWeb.TbotMessengerInputTest do
   use TbotWeb.ConnCase
-  import Tbot.MessengerHelper
+
+  alias Tbot.MessengerRequestData, as: MessengerRequestData
+  alias Tbot.MessengerInput, as: MessengerInput
 
   test "messenger entry value returns sender_id and text" do
-    [sender_id, text] = ["12345", "vai malandra"]
-    parsed_entry = stub_messenger_entry_value(sender_id, text) |> parse_messenger_entry
+    sender_id = "12345"
+    text = "vai malandra"
+    parsed_entry = stub_messenger_entry_value(sender_id, text) |> MessengerInput.parse_messenger_entry
 
-    assert parsed_entry == %{message: "vai malandra", sender_id: "12345", type: "text"}
+    assert parsed_entry == %Tbot.MessengerRequestData{message: "vai malandra", sender_id: "12345", type: "text"}
   end
 
   defp stub_messenger_entry_value(sender_id, text) do
