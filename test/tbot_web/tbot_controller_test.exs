@@ -28,7 +28,7 @@ defmodule TbotWeb.TbotControllerTest do
     assert test_conn.status == 500
   end
 
-  test "POST /bot with 'object': 'page' returns 200 and body", %{conn: conn} do
+  test "POST /bot with 'object': 'page' returns 200", %{conn: conn} do
     with_mock HTTPotion, [post: fn(_url, _headers_and_body) -> "ok" end] do
       [sender_id | text] = ["123456", "blabla"]
       test_conn = conn

@@ -2,7 +2,7 @@ defmodule TbotWeb.TbotController do
   use TbotWeb, :controller
 
   alias Tbot.MessengerInput, as: MessengerInput
-  alias Tbot.MessengerOutput, as: MessengerOutput
+  alias Tbot.MessengerOutputTask, as: MessengerOutputTask
 
   def challenge(conn,
     %{"hub.mode" => "subscribe", "hub.verify_token" => token, "hub.challenge" => challenge}) do
@@ -16,10 +16,7 @@ defmodule TbotWeb.TbotController do
 
   def webhook(conn, %{"entry" => entry, "object" => "page"}) do
     parsed_entry = MessengerInput.parse_messenger_entry(entry)
-
-    # TODO: Send response in a "Task"
-    body = MessengerOutput.build_request_body(parsed_entry)
-    MessengerOutput.send(body)
+    MessengerOutputTask.respond_messenger(parsed_entry)
 
     conn |> send_resp(200, "ok")
   end

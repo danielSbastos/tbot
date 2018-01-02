@@ -3,7 +3,6 @@ defmodule TbotWeb.TbotMessengerOutputTest do
 
   alias Tbot.MessengerOutput, as: MessengerOutput
   alias Tbot.MessengerRequestData, as: MessengerRequestData
-  alias Tbot.MessengerResponsetData, as: MessengerResponsetData
 
   import Mock
 

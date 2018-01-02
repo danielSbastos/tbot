@@ -1,7 +1,6 @@
 defmodule TbotWeb.TbotMessengerInputTest do
   use TbotWeb.ConnCase
 
-  alias Tbot.MessengerRequestData, as: MessengerRequestData
   alias Tbot.MessengerInput, as: MessengerInput
 
   test "messenger entry value returns sender_id and text" do

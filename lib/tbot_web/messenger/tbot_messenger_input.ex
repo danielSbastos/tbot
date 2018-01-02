@@ -33,7 +33,10 @@ defmodule Tbot.MessengerInput do
   end
 
   defp parse_message_key(msg) do
-    message = msg |> parse_messaging_key |> hd |> Map.get("message")
+    message = msg
+    |> parse_messaging_key
+    |> hd
+    |> Map.get("message")
     define_message_type(message)
   end
 
