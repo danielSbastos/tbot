@@ -34,7 +34,6 @@ For production tokens, insert in your `prod.secret.exs`:
 config :tbot,
   messenger_verify_token: System.get_env('MESSENGER_VERIFY_TOKEN'),
   messenger_page_token: System.get_env('MESSENGER_PAGE_TOKEN')
-
 ```
 
 Install hex package manager and rebar, install missing dependencies and create the storage for the repo
