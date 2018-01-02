@@ -14,6 +14,7 @@ defmodule Tbot.Application do
       supervisor(Tbot.Repo, []),
       # Start the endpoint when the application starts
       supervisor(TbotWeb.Endpoint, []),
+      supervisor(Task.Supervisor, [[name: Tbot.TaskSupervisor, restart: :transient]])
       # Start your own worker by calling: Tbot.Worker.start_link(arg1, arg2, arg3)
       # worker(Tbot.Worker, [arg1, arg2, arg3]),
     ]

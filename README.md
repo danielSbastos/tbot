@@ -25,8 +25,15 @@ use Mix.Config
 
 config :tbot,
   messenger_verify_token: "your_messenger_verify_token",
-  messenger_app_id: "your_messenger_app_id",
   messenger_page_token: "your_messenger_page_token"
+```
+
+For production tokens, insert in your `prod.secret.exs`:
+
+```ex
+config :tbot,
+  messenger_verify_token: System.get_env('MESSENGER_VERIFY_TOKEN'),
+  messenger_page_token: System.get_env('MESSENGER_PAGE_TOKEN')
 ```
 
 Install hex package manager and rebar, install missing dependencies and create the storage for the repo
