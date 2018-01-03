@@ -2,7 +2,6 @@ defmodule TbotWeb.MessengerOutputTaskTest do
   use TbotWeb.ConnCase
 
   alias Tbot.MessengerOutputTask, as: MessengerOutputTask
-  alias Tbot.MessengerOutput, as: MessengerOutput
   alias Tbot.MessengerRequestData, as: RequestData
 
   import Mock
@@ -16,6 +15,4 @@ defmodule TbotWeb.MessengerOutputTaskTest do
       assert_receive {:DOWN, ^ref, :process, _, :normal}, 500
     end
   end
-
-  defp messenger_page_token, do: Application.get_env(:tbot, :messenger_page_token)
 end

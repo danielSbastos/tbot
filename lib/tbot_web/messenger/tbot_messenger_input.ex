@@ -41,7 +41,7 @@ defmodule Tbot.MessengerInput do
   end
 
   defp define_message_type(%{"mid" => _, "seq" => _, "text" => text}) do
-    msg_data = %MessengerRequestData{message: text, type: "text"}
+    %MessengerRequestData{message: text, type: "text"}
   end
 
   defp parse_sender_key(msg) do
@@ -50,7 +50,7 @@ defmodule Tbot.MessengerInput do
     |> hd
     |> Map.get("sender")
     |> Map.get("id")
-    msg_data = %MessengerRequestData{sender_id: sender_id}
+    %MessengerRequestData{sender_id: sender_id}
   end
 
   defp parse_messaging_key(msgn), do: msgn |> hd |>  Map.get("messaging")
