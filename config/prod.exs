@@ -22,8 +22,8 @@ config :tbot, TbotWeb.Endpoint,
 
 # Messenger tokens
 config :tbot,
-  messenger_verify_token: System.get_env('MESSENGER_VERIFY_TOKEN'),
-  messenger_page_token: System.get_env('MESSENGER_PAGE_TOKEN')
+  messenger_verify_token: System.get_env("MESSENGER_VERIFY_TOKEN"),
+  messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN")
 
 # Configure your database
 config :tbot, TbotWeb.Repo,
