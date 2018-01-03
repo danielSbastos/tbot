@@ -43,7 +43,7 @@ defmodule Tbot.Mixfile do
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:httpotion, "~> 3.0.2"},
-      {:mock, "~> 0.3.0", only: :test}
+      {:mock, "~> 0.3.0", only: :test},
     ]
   end
 
