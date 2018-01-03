@@ -1,6 +1,6 @@
 use Mix.Config
 
-# For development, we disable any cache and enable
+# For development, we disable any cache and enabl
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
