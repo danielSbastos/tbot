@@ -33,11 +33,11 @@ defmodule TbotWeb.TbotMessengerOutputTest do
       MessengerOutput.send(request_body)
 
       assert called HTTPotion.post(
-        "https://graph.facebook.com/v2.6/me/messages?access_token=" <> messenger_page_token,
+        "https://graph.facebook.com/v2.6/me/messages?access_token=" <> messenger_page_token(),
         body: Poison.encode!(request_body), headers: ["Content-Type": "application/json"]
       )
     end
   end
 
-  defp messenger_page_token, do: Application.get_env(:tbot, :messenger_page_token)
+  defp messenger_page_token(), do: Application.get_env(:tbot, :messenger_page_token)
 end

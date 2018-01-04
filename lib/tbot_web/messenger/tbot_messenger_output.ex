@@ -18,7 +18,7 @@ defmodule Tbot.MessengerOutput do
   @headers ["Content-Type": "application/json"]
 
   def send(body) do
-    url = @messenger_url <> messenger_page_token
+    url = @messenger_url <> messenger_page_token()
     HTTPotion.post(url, body: Poison.encode!(body), headers: @headers)
   end
 
@@ -37,5 +37,5 @@ defmodule Tbot.MessengerOutput do
     %MessengerResponseData{recipient: %{id: recipient_id}}
   end
 
-  defp messenger_page_token, do: Application.get_env(:tbot, :messenger_page_token)
+  defp messenger_page_token(), do: Application.get_env(:tbot, :messenger_page_token)
 end

@@ -22,7 +22,9 @@ config :tbot, TbotWeb.Endpoint,
 # Messenger tokens
 config :tbot,
   messenger_verify_token: System.get_env("MESSENGER_VERIFY_TOKEN"),
-  messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN")
+  messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN"),
+  yandex_api_key: System.get_env("YANDEX_API_KEY")
+  wordnik_api_key: System.get_env("WORDNIK_API_KEY")
 
 # Configure your database
 config :tbot, Tbot.Repo,
