@@ -7,11 +7,11 @@ defmodule Tbot.HangmanDrawingsTest do
     drawing_three = HangmanDrawings.draw(3)
     drawing_five = HangmanDrawings.draw(5)
 
-    assert drawing_five == fifth_drawing
-    assert drawing_three == third_drawing
+    assert drawing_three == third_drawing()
+    assert drawing_five == fifth_drawing()
   end
 
-  defp third_drawing do
+  defp third_drawing() do
     """
     ________
     |      |
@@ -22,7 +22,7 @@ defmodule Tbot.HangmanDrawingsTest do
     """
   end
 
-  def fifth_drawing do
+  def fifth_drawing() do
     """
     ________
     |      |

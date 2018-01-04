@@ -6,24 +6,24 @@ defmodule Tbot.HangmanWordTest do
   import Mock
 
   test "'fetch_random_english_word' returns word" do
-    with_mock HTTPotion, [get: fn(_url) -> stub_random_word_response end] do
+    with_mock HTTPotion, [get: fn(_url) -> stub_random_word_response() end] do
       response = HangmanWord.fetch_random_english_word
 
       assert called HTTPotion.get(
-        "http://api.wordnik.com:80/v4/words.json/randomWord?api_key=" <> wordnik_api_key
+        "http://api.wordnik.com:80/v4/words.json/randomWord?api_key=" <> wordnik_api_key()
       )
       assert response == "unstepped"
     end
   end
 
   test "'translate_to_portuguese' returns translated word" do
-    with_mock HTTPotion, [post: fn(_url, _body_and_headers) -> stub_translation end] do
+    with_mock HTTPotion, [post: fn(_url, _body_and_headers) -> stub_translation() end] do
       word = "Adriatic Sea"
 
       response = HangmanWord.translate_to_portuguese(word)
 
       assert called HTTPotion.post(
-        "https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-pt&key=" <> yandex_api_key,
+        "https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-pt&key=" <> yandex_api_key(),
         body: "text=" <> word,
         headers: ["Content-Type": "application/x-www-form-urlencoded"]
       )
@@ -31,7 +31,7 @@ defmodule Tbot.HangmanWordTest do
     end
   end
 
-  defp stub_random_word_response do
+  defp stub_random_word_response() do
     %HTTPotion.Response{
       body: "{\"id\":349663,\"word\":\"unstepped\"}",
       headers: %HTTPotion.Headers{
@@ -50,7 +50,7 @@ defmodule Tbot.HangmanWordTest do
     }
   end
 
-  defp stub_translation do
+  defp stub_translation() do
     %HTTPotion.Response{
       body: "{\"code\":200,\"lang\":\"en-pt\",\"text\":[\"Mar Adriático\"]}",
       headers: %HTTPotion.Headers{
@@ -66,6 +66,6 @@ defmodule Tbot.HangmanWordTest do
     }
   end
 
-  defp wordnik_api_key, do: Application.get_env(:tbot, :wordnik_api_key)
-  defp yandex_api_key, do: Application.get_env(:tbot, :yandex_api_key)
+  defp wordnik_api_key(), do: Application.get_env(:tbot, :wordnik_api_key)
+  defp yandex_api_key(), do: Application.get_env(:tbot, :yandex_api_key)
 end

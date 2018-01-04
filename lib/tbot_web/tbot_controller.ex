@@ -6,7 +6,7 @@ defmodule TbotWeb.TbotController do
 
   def challenge(conn,
     %{"hub.mode" => "subscribe", "hub.verify_token" => token, "hub.challenge" => challenge}) do
-    if token == verify_token do
+    if token == verify_token() do
       conn |> send_resp(200, challenge)
     else
       conn |> put_status(500)
@@ -22,5 +22,5 @@ defmodule TbotWeb.TbotController do
   end
   def webhook(conn, _),  do: conn |> put_status(500)
 
-  defp verify_token, do: Application.get_env(:tbot, :messenger_verify_token)
+  defp verify_token(), do: Application.get_env(:tbot, :messenger_verify_token)
 end

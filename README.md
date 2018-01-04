@@ -40,7 +40,7 @@ config :tbot,
   wordnik_api_key: "your_wordnik_api_key"
 ```
 
-2) Another account needs to be created at [Yandex](https://yandex.com/) (free translation service) and, again, an API key gathered. Afterwards, also add it to `tbot/config/dev.secret.exs`:
+2) Another account needs to be created at [Yandex](https://yandex.com/) (free translation service) and, again, an API key obtained. Afterwards, also add it to `tbot/config/dev.secret.exs`:
 
 ```ex
 config :tbot,
