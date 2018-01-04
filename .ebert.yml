@@ -1,4 +1,4 @@
-s configuration was used Ebert to review the danielSbastos/tbot repository
+# This configuration was used Ebert to review the danielSbastos/tbot repository
 # on 5d24868d8494569e92c98063763525e0e6e4e315.
 # You can make this the default configuration for future reviews by moving this
 # file to your repository as `.ebert.yml` and pushing it to GitHub, and tweak
@@ -10,8 +10,15 @@ styleguide: plataformatec/linters
 engines:
   credo:
     enabled: true
+  fixme:
+    enabled: false
+  eslint:
+    enabled: false
+  csslint:
+    enabled: false
+  remark-lint:
+    enabled: false
 exclude_paths:
 - config
 - priv/repo
 - test
-
