@@ -57,4 +57,7 @@ config :tbot, Tbot.Repo,
   hostname: "localhost",
   pool_size: 10
 
+config :tbot,
+  redis_host: "redis://localhost:6379/3"
+
 import_config "dev.secret.exs"
