@@ -1,4 +1,5 @@
 defmodule Tbot.Redis do
+  @moduledoc false
   def start_link do
    {:ok, conn} = Redix.start_link(redis_host())
    conn
