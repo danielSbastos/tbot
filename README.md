@@ -1,3 +1,4 @@
+[![Ebert](https://ebertapp.io/github/danielSbastos/tbot.svg)](https://ebertapp.io/github/danielSbastos/tbot)
 [![Codebeat](https://codebeat.co/badges/42c9fe03-e8ba-469e-8b14-3282f5361b83)](https://codebeat.co/projects/github-com-danielsbastos-tbot-master)
 [![CircleCI](https://circleci.com/gh/danielSbastos/tbot/tree/master.svg?style=shield&circle-token=350e60ec92fa8686df6b34c07242545a7d7a1e15)](https://circleci.com/gh/danielSbastos/tbot/tree/master)
 
@@ -13,8 +14,8 @@
 
 ## Dependencies
 
-- PostgreSQL 9.6.1
 - Elixir >= 1.5
+- PostgreSQL 9.6.1
 
 ## Setup
 
