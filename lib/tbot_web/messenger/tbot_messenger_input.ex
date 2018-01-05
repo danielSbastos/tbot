@@ -1,5 +1,6 @@
 defmodule Tbot.MessengerInput do
   alias Tbot.MessengerRequestData, as: MessengerRequestData
+  alias Tbot.SyncUserHangman, as: SyncUserHangman
 
   @moduledoc """
   Input module that parses the incoming "entry" key from messenger JSON POST body request
@@ -29,7 +30,11 @@ defmodule Tbot.MessengerInput do
   def parse_messenger_entry(entry) do
     message = parse_message_key(entry)
     sender = parse_sender_key(entry)
-    Map.merge(message, sender, fn _k, v1, v2 ->  v2 || v1 end)
+    map = Map.merge(message, sender, fn _k, v1, v2 ->  v2 || v1 end)
+    if is_magic_word?(map.message) do
+      SyncUserHangman.sync(map)
+    end
+    map
   end
 
   defp parse_message_key(msg) do
@@ -51,6 +56,12 @@ defmodule Tbot.MessengerInput do
     |> Map.get("sender")
     |> Map.get("id")
     %MessengerRequestData{sender_id: sender_id}
+  end
+
+  # NOTE: This will be altered to a "get started" and "persistent menu"
+  # and, therefore, the message type will alter to "postback"
+  defp is_magic_word?(text) do
+    text == "oi"
   end
 
   defp parse_messaging_key(msgn), do: msgn |> hd |>  Map.get("messaging")

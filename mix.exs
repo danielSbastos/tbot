@@ -44,6 +44,7 @@ defmodule Tbot.Mixfile do
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:httpotion, "~> 3.0.2"},
       {:mock, "~> 0.3.0", only: :test},
+      {:redix, ">= 0.0.0"},
     ]
   end
 
