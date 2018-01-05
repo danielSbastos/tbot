@@ -12,6 +12,7 @@ jobs:
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: ubuntu
+      - image: redis
     steps:
       - checkout
       - run: mix local.hex --force
