@@ -10,6 +10,6 @@ defmodule Tbot.SyncUserHangman do
   def sync(magic_map) do
     conn = Redis.start_link
     word = HangmanWord.fetch_random_english_word |> HangmanWord.translate_to_portuguese
-    Redis.set(conn, magic_map.sender_id, word)
+    Redis.set(conn, magic_map.sender_id, :chosen_word, word)
   end
 end

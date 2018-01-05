@@ -5,6 +5,13 @@ defmodule Tbot.SyncUserHangmanTest do
 
   import Mock
 
+  setup_all do
+    {:ok, conn} = Redix.start_link(redis_host())
+    Redix.command!(conn, ["FLUSHDB"])
+    Redix.stop(conn)
+    :ok
+  end
+
   test "'sync' fetches word and saves in redis" do
     with_mock HTTPotion, [
       get: fn(_url) -> stub_random_word_response() end,
@@ -16,7 +23,7 @@ defmodule Tbot.SyncUserHangmanTest do
       assert sync == {:ok, 1}
 
       {:ok, conn} = Redix.start_link(redis_host())
-      assert Redix.command(conn, ["SMEMBERS", "12345"]) == {:ok, ["Mar Adriático"]}
+      assert Redix.command(conn, ["HGETALL", "12345"]) == {:ok, ["chosen_word", "Mar Adriático"]}
     end
   end
 

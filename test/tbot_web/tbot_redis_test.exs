@@ -26,19 +26,28 @@ defmodule Tbot.RedisTest do
     assert is_pid(conn) == true
   end
 
-  test "'set' sets new value", %{conn: c} do
-    Redis.set(c, "prepara", "que agora")
-    Redis.set(c, "prepara", "é hora")
+  test "'set' adds new key and value to hash", %{conn: c} do
+    Redis.set(c, "12345", "prepara", "que agora")
+    Redis.set(c, "12345", "é hora do show", "das poderosas")
 
-    assert Redix.command(c, ["SMEMBERS", :prepara]) == {:ok, ["é hora", "que agora"]}
+    assert Redix.command(c, ["HGETALL", "12345"]) ==
+      {:ok, ["prepara", "que agora", "é hora do show", "das poderosas"]}
   end
 
-  test "'get_members' returns all set members", %{conn: c} do
-    Redis.set(c, "prepara", "que agora")
-    Redis.set(c, "prepara", "é hora")
-    members = Redis.get_members(c, "prepara")
+  test "'get_members' returns all hash members", %{conn: c} do
+    Redis.set(c, "12345", "prepara", "que agora")
+    Redis.set(c, "12345", "é hora do show", "das poderosas")
+    members = Redis.get_members(c, "12345")
 
-    assert Redix.command(c, ["SMEMBERS", :prepara]) == {:ok, members}
+    assert Redix.command(c, ["HGETALL", "12345"]) == {:ok, members}
+  end
+
+  test "'get_key_value' returns all set members", %{conn: c} do
+    Redis.set(c, "12345", "prepara", "que agora")
+    Redis.set(c, "12345", "é hora do show", "das poderosas")
+    value = Redis.get_key_value(c, "12345", "prepara")
+
+    assert Redix.command(c, ["HGET", "12345", "prepara"]) == {:ok, value}
   end
 
   defp redis_host(), do: Application.get_env(:tbot, :redis_host)

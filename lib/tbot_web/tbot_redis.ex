@@ -5,12 +5,17 @@ defmodule Tbot.Redis do
    conn
   end
 
-  def set(conn, key, value) do
-    Redix.command(conn, ["SADD", key, value])
+  def set(conn, name, key, value) do
+    Redix.command(conn, ["HSET", name, key, value])
   end
 
-  def get_members(conn, key) do
-    {:ok, value} = Redix.command(conn, ["SMEMBERS", key])
+  def get_members(conn, name) do
+    {:ok, value} = Redix.command(conn, ["HGETALL", name])
+    value
+  end
+
+  def get_key_value(conn, name, key) do
+    {:ok, value} = Redix.command(conn, ["HGET", name, key])
     value
   end
 
