@@ -42,7 +42,7 @@ defmodule Tbot.RedisTest do
     assert Redix.command(c, ["HGETALL", "12345"]) == {:ok, members}
   end
 
-  test "'get_key_value' returns all set members", %{conn: c} do
+  test "'get_key_value' returns all hash's key value", %{conn: c} do
     Redis.set(c, "12345", "prepara", "que agora")
     Redis.set(c, "12345", "é hora do show", "das poderosas")
     value = Redis.get_key_value(c, "12345", "prepara")
