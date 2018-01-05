@@ -30,7 +30,9 @@ defmodule TbotWeb.TbotControllerTest do
 
   test "POST /bot with 'object': 'page' returns 200", %{conn: conn} do
     with_mock HTTPotion, [post: fn(_url, _headers_and_body) -> "ok" end] do
-      [sender_id | text] = ["123456", "blabla"]
+      sender_id = "123456"
+      text = "blabla"
+
       test_conn = conn
       |> put_req_header("accept", "application/json")
       |> post("/bot", stub_post_messenger(sender_id, text))
