@@ -31,7 +31,6 @@ defmodule Tbot.MessengerInput do
     message = parse_message_key(entry)
     sender = parse_sender_key(entry)
     map = Map.merge(message, sender, fn _k, v1, v2 ->  v2 || v1 end)
-    # TODO: Test
     if is_magic_word?(map.message) do
       SyncUserHangman.sync(map)
     end
@@ -60,6 +59,7 @@ defmodule Tbot.MessengerInput do
   end
 
   # NOTE: This will be altered to a "get started" and "persistent menu"
+  # and, therefore, the message type will alter to "postback"
   defp is_magic_word?(text) do
     text == "oi"
   end

@@ -6,19 +6,11 @@ defmodule Tbot.Redis do
   end
 
   def set(conn, key, value) do
-    Redix.command(conn, ["SET", key, value])
+    Redix.command(conn, ["SADD", key, value])
   end
 
-  def update(conn, key, value) do
-    if Redix.command(conn, ["EXISTS", key]) == 1 do
-      existing_value = Redix.command(conn, ["GET", key])
-      list = existing_value ++ [value]
-      Redix.command(conn, ["SET", key, list])
-    end
-  end
-
-  def get(conn, key) do
-    {:ok, value} = Redix.command(conn, ["GET", key])
+  def get_members(conn, key) do
+    {:ok, value} = Redix.command(conn, ["SMEMBERS", key])
     value
   end
 

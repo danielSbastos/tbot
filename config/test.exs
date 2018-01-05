@@ -5,7 +5,7 @@ config :tbot,
   messenger_page_token: "blabla",
   yandex_api_key: "blabla",
   wordnik_api_key: "blabla",
-  redis_host: "redis://localhost:6379/3"
+  redis_host: "redis://localhost:6379/2"
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
