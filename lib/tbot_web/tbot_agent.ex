@@ -6,6 +6,14 @@ defmodule Tbot.Agent do
     Agent.start_link(&Map.new/0, name: __MODULE__)
   end
 
+  def alive? do
+    Process.whereis(__MODULE__)
+  end
+
+  def stop do
+    Agent.stop(__MODULE__)
+  end
+
   def update(key, value) do
     Agent.update(__MODULE__, &Map.put(&1, key, value))
   end
