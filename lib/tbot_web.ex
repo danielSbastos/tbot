@@ -22,7 +22,6 @@ defmodule TbotWeb do
       use Phoenix.Controller, namespace: TbotWeb
       import Plug.Conn
       import TbotWeb.Router.Helpers
-      import TbotWeb.Gettext
     end
   end
 
@@ -30,7 +29,6 @@ defmodule TbotWeb do
     quote do
       use Phoenix.Router
       import Plug.Conn
-      import Phoenix.Controller
     end
   end
 

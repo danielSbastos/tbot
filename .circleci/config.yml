@@ -18,6 +18,5 @@ jobs:
       - run: mix local.hex --force
       - run: mix local.rebar
       - run: mix deps.get
-      - run: mix ecto.create
       - run: mix test
       - run: mix credo
