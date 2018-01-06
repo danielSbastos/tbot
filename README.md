@@ -9,19 +9,20 @@
 - [Setup](#setup)
 - [Development](#development)
 - [Tests](#tests)
-- [Code Quality](#code_quality)
+- [Code Quality](#code-quality)
 
 
 ## Dependencies
 
 - Elixir >= 1.5
+- Redis 3.2.0
 - PostgreSQL 9.6.1
 
 ## Setup
 
 ### Messenger
 
-A [Messegner app](https://developers.facebook.com/) must be created and its credentials gathered. For this, create the following file to store tokens for development environments, `tbot/config/dev.secret.exs`, and add the contents below:
+A [Messenger app](https://developers.facebook.com/) must be created and its credentials gathered. For this, create the following file to store tokens for development environments, `tbot/config/dev.secret.exs`, and add the contents below:
 
 ```ex
 use Mix.Config
@@ -33,7 +34,7 @@ config :tbot,
 
 ### Fetching a random word
 
-1) You need to create an account in [Wordnik](https://www.wordnik.com/) (to make GET requests for a random word and obtain) an API key. After this is done, add it in `tbot/config/dev.secret.exs` as the following:
+1) You need to create an account on [Wordnik](https://www.wordnik.com/) (to make GET requests for a random word and obtain) an API key. After this is done, add it in `tbot/config/dev.secret.exs` as the following:
 
 ```ex
 config :tbot,
@@ -52,13 +53,13 @@ config :tbot,
 
 ### Other
 
-Install hex package manager and rebar, install missing dependencies and create the storage for the repo
+Install hex package manager and rebar and install missing dependencies
 
 ```
 $ mix local.hex --force
 $ mix local.rebar
-$ mix deps.get
 $ mix ecto.create
+$ mix deps.get
 ```
 
 ## Developemnt
@@ -68,6 +69,11 @@ To start the server:
 ```sh
 $ mix phx.server
 ```
+
+### Redis
+
+In order to run the bot locally, Redis must be running in the background, so be sure that its server is on
+and accepting connections to the host defined in `dev.exs`.
 
 ## Tests
 
