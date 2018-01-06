@@ -1,7 +1,7 @@
 defmodule Tbot.SyncUserChosenWordTest do
   use TbotWeb.ConnCase
 
-  alias Tbot.SyncUserChosenWord, as: SyncUserHangman
+  alias Tbot.SyncUserChosenWord, as: SyncUserChosenWord
 
   import Mock
 
@@ -18,7 +18,7 @@ defmodule Tbot.SyncUserChosenWordTest do
       post: fn(_url, _body_and_headers) -> stub_translation() end
     ] do
 
-      sync = SyncUserHangman.sync(%{sender_id: "12345"})
+      sync = SyncUserChosenWord.sync(%{sender_id: "12345"})
 
       assert sync == {:ok, 1}
 

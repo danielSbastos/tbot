@@ -1,6 +1,6 @@
 defmodule Tbot.MessengerInput do
   alias Tbot.MessengerRequestData, as: MessengerRequestData
-  alias Tbot.SyncUserHangman, as: SyncUserHangman
+  alias Tbot.SyncUserChosenWord, as: SyncUserChosenWord
 
   @moduledoc """
   Input module that parses the incoming "entry" key from messenger JSON POST body request
@@ -32,7 +32,7 @@ defmodule Tbot.MessengerInput do
     sender = parse_sender_key(entry)
     map = Map.merge(message, sender, fn _k, v1, v2 ->  v2 || v1 end)
     if is_magic_word?(map.message) do
-      SyncUserHangman.sync(map)
+      SyncUserChosenWord.sync(map)
     end
     map
   end
