@@ -5,10 +5,6 @@
 # is restricted to this project.
 use Mix.Config
 
-# General application configuration
-config :tbot,
-  ecto_repos: [Tbot.Repo]
-
 # Configures the endpoint
 config :tbot, TbotWeb.Endpoint,
   url: [host: "localhost"],

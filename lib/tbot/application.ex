@@ -10,8 +10,6 @@ defmodule Tbot.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the Ecto repository
-      supervisor(Tbot.Repo, []),
       # Start the endpoint when the application starts
       supervisor(TbotWeb.Endpoint, []),
       supervisor(Task.Supervisor, [[name: Tbot.TaskSupervisor, restart: :transient]])

@@ -16,7 +16,6 @@
 
 - Elixir >= 1.5
 - Redis 3.2.0
-- PostgreSQL 9.6.1
 
 ## Setup
 
@@ -53,12 +52,11 @@ config :tbot,
 
 ### Other
 
-Install hex package manager and rebar and install missing dependencies
+Install hex package manager and rebar and install missing dependencies.
 
 ```
 $ mix local.hex --force
 $ mix local.rebar
-$ mix ecto.create
 $ mix deps.get
 ```
 
