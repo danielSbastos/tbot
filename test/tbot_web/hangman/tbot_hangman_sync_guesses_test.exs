@@ -58,5 +58,16 @@ defmodule Tbot.HangmanSyncGuessesTest do
     assert Redis.get_key_value(conn, sender_id, :incorrect_guesses) == "wls"
   end
 
+  test "'reset_all_guesses' reset all guesses", %{conn: conn} do
+    sender_id = "12345678"
+    Redis.set(conn, sender_id, :chosen_word, "Bunda")
+    Redis.set(conn, sender_id, :incorrect_guesses, "ls")
+
+    SyncGuesses.reset_all_guesses(sender_id)
+
+    assert Redis.get_key_value(conn, sender_id, :incorrect_guesses) == ""
+    assert Redis.get_key_value(conn, sender_id, :correct_guesses) == ""
+  end
+
   defp redis_host(), do: Application.get_env(:tbot, :redis_host)
 end

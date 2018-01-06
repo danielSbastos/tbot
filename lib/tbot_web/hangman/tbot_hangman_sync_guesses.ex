@@ -28,4 +28,10 @@ defmodule Tbot.HangmanSyncGuesses do
       Redis.set(conn, sender_id, :incorrect_guesses, guess_word <> existent_incorrect_guesses)
     end
   end
+
+  def reset_all_guesses(sender_id) do
+    conn = Redis.start_link
+    Redis.set(conn, sender_id, :correct_guesses, "")
+    Redis.set(conn, sender_id, :incorrect_guesses, "")
+  end
 end

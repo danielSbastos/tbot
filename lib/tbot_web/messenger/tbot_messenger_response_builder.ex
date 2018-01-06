@@ -19,7 +19,7 @@ defmodule Tbot.MessengerResponseBuilder do
     text = if Agent.alive? do
       chosen_word = Agent.get(sender_id)
       Agent.stop
-      first_interaction_message(chosen_word)
+      first_interaction_message(chosen_word, sender_id)
     else
       check_for_guess(text, sender_id)
     end
@@ -27,7 +27,8 @@ defmodule Tbot.MessengerResponseBuilder do
 
   ############# FIRST INTERACTION METHODS #########################
 
-  defp first_interaction_message(chosen_word) do
+  defp first_interaction_message(chosen_word, sender_id) do
+    SyncGuesses.reset_all_guesses(sender_id)
     chosen_word
     |> build_word_underscores
     |> merge_underscores_and_drawing
