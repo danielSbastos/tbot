@@ -7,7 +7,7 @@ defmodule Tbot.MessengerResponseBuilder do
   alias Tbot.Redis, as: Redis
   alias Tbot.Agent, as: Agent
   alias Tbot.HangmanSyncGuesses, as: SyncGuesses
-  alias Tbot.HangmanDrawings, as: Drawings
+  alias Tbot.HangmanBuildDrawing, as: BuildDrawing
 
   def response_data(
     %Tbot.MessengerRequestData{sender_id: sender_id, message: text, type: type}) do
@@ -47,13 +47,13 @@ defmodule Tbot.MessengerResponseBuilder do
 
   defp check_for_guess(text, sender_id) do
     if String.length(text) == 1 do
-      if is_guess_in_chosen_word?(text, sender_id) do
-        SyncGuesses.update_correct_guess(text, sender_id)
-        "correct"
-      else
-        SyncGuesses.update_incorrect_guess(text, sender_id)
-        "incorrect"
-      end
+      guess_flag =
+        case is_guess_in_chosen_word?(text, sender_id) do
+          true -> :correct_guesses
+          false -> :incorrect_guesses
+        end
+      SyncGuesses.update_guesses(text, guess_flag, sender_id)
+      BuildDrawing.get_drawing(text, guess_flag, sender_id)
     else
       "Desculpe, não entendi"
     end

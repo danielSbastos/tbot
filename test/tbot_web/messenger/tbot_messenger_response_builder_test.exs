@@ -21,7 +21,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     end
   end
 
-  test "first interaction with random word", %{conn: conn} do
+  test "first interaction with magic word", %{conn: conn} do
     message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "oi", type: "text"}
     save_word_in_redis(conn, "12345", "Anitta")
     put_word_in_agent("12345", "Anitta")
@@ -47,7 +47,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
       }
   end
 
-  test "guess with correct guess letter", %{conn: conn} do
+  test "first guess with correct letter", %{conn: conn} do
     message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "A", type: "text"}
     save_word_in_redis(conn, "12345", "Anitta")
 
@@ -57,11 +57,72 @@ defmodule Tbot.MessengerResponseBuilderTest do
       %Tbot.MessengerRequestData{
         sender_id: "12345",
         type: "text",
-        message: "correct"
+        message:
+          """
+          ________
+          |      |
+          |
+          |
+          |
+          |
+           A _ _ _ _ _
+          """ <> "\nBoa! Fale mais uma letra!"
       }
   end
 
-  test "guess with incorrect guess letter", %{conn: conn} do
+  test "third correct guess with two incorrect guesses", %{conn: conn} do
+    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "A", type: "text"}
+
+    save_word_in_redis(conn, "12345", "Anitta")
+    update_redis(conn, "12345", :correct_guesses, "ant")
+    update_redis(conn, "12345", :incorrect_guesses, "wo")
+
+    parsed_message = ResponseBuilder.response_data(message_map)
+
+    assert parsed_message ==
+      %Tbot.MessengerRequestData{
+        sender_id: "12345",
+        type: "text",
+        message:
+          """
+          ________
+          |      |
+          |
+          |
+          |
+          |
+           A n _ t _ a
+          """ <> "\nBoa! Fale mais uma letra!"
+      }
+  end
+
+  test "fifth incorrect guess with three correct guesses", %{conn: conn} do
+    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "p", type: "text"}
+
+    save_word_in_redis(conn, "12345", "Anitta")
+    update_redis(conn, "12345", :correct_guesses, "ant")
+    update_redis(conn, "12345", :incorrect_guesses, "wozr")
+
+    parsed_message = ResponseBuilder.response_data(message_map)
+
+    assert parsed_message ==
+      %Tbot.MessengerRequestData{
+        sender_id: "12345",
+        type: "text",
+        message:
+          """
+          ________
+          |      |
+          |      0
+          |     /|\\
+          |     /
+          |
+           _ n _ t _ a
+          """ <> "\nÚltima chance para acertar!"
+      }
+  end
+
+  test "first guess with incorrect letter", %{conn: conn} do
     message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "w", type: "text"}
     save_word_in_redis(conn, "12345", "Anitta")
 
@@ -71,7 +132,38 @@ defmodule Tbot.MessengerResponseBuilderTest do
       %Tbot.MessengerRequestData{
         sender_id: "12345",
         type: "text",
-        message: "incorrect"
+        message:
+          """
+          ________
+          |      |
+          |      0
+          |
+          |
+          |
+          """ <> "\nVish. Primeiro erro.."
+      }
+  end
+
+  test "fourth guess with incorrect letter", %{conn: conn} do
+    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "p", type: "text"}
+    save_word_in_redis(conn, "12345", "Anitta")
+    update_redis(conn, "12345", :incorrect_guesses, "wdb")
+
+    parsed_message = ResponseBuilder.response_data(message_map)
+
+    assert parsed_message ==
+      %Tbot.MessengerRequestData{
+        sender_id: "12345",
+        type: "text",
+        message:
+          """
+          ________
+          |      |
+          |      0
+          |     /|\\
+          |
+          |
+          """ <> "\nCara, o boneco vai morrer. Já errou quatro vezes."
       }
   end
 
@@ -90,6 +182,10 @@ defmodule Tbot.MessengerResponseBuilderTest do
 
   defp save_word_in_redis(conn, sender_id, chosen_word) do
     Redis.set(conn, sender_id, :chosen_word, chosen_word)
+  end
+
+  defp update_redis(conn, sender_id, key, value) do
+    Redis.set(conn, sender_id, key, value)
   end
 
   defp put_word_in_agent(sender_id, chosen_word) do
