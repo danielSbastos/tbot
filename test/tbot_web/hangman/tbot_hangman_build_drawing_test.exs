@@ -79,22 +79,24 @@ defmodule Tbot.HangmanBuildDrawingTest do
   #   assert drawing == correct_drawing
   # end
 
-  # test "first guess with incorrect letter", %{conn: conn} do
-  #   save_word_in_redis(conn, "12345", "Anitta")
-  #   correct_drawing =
-  #     """
-  #     ________
-  #     |      |
-  #     |      0
-  #     |
-  #     |
-  #     |
-  #     """ <> "\nVish. Primeiro erro.."
+  test "first guess with incorrect letter", %{conn: conn} do
+    save_word_in_redis(conn, "12345", "Anitta")
+    update_redis(conn, "12345", :incorrect_guesses, "w")
+    correct_drawing =
+      """
+      ________
+      |      |
+      |      0
+      |
+      |
+      |
+       _ _ _ _ _ _
+      """ <> "\nVish. Primeiro erro.."
 
-  #   drawing = BuildDrawing.get_drawing("w", "12345")
+    drawing = BuildDrawing.get_drawing("w", :incorrect_guesses, "12345")
 
-  #   assert drawing == correct_drawing
-  # end
+    assert drawing == correct_drawing
+  end
 
   # test "fourth guess with incorrect letter", %{conn: conn} do
   #   save_word_in_redis(conn, "12345", "Anitta")

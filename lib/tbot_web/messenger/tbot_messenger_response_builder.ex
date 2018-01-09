@@ -26,6 +26,7 @@ defmodule Tbot.MessengerResponseBuilder do
   end
 
   ############# FIRST INTERACTION METHODS #########################
+  # TODO: Move them to "Tbot.HangmanBuildDrawing"
 
   defp first_interaction_message(chosen_word, sender_id) do
     SyncGuesses.reset_all_guesses(sender_id)

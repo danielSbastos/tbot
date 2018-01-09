@@ -7,14 +7,28 @@ defmodule Tbot.HangmanBuildDrawing do
   alias Tbot.HangmanDrawings, as: Drawings
   alias Tbot.Redis, as: Redis
 
-  # def get_drawing(guess, guess_flag = :incorrect_guesses, sender_id) do
-  #   drawing_guess_count =
-  #   guess
-  #   |> guess_count(sender_id)
-  #   # IO.puts(drawing_guess_count)
-  #   # |> Drawings.draw
-  # end
+  def get_drawing(guess, guess_flag = :incorrect_guesses, sender_id) do
+    guess_count = incorrect_guess_count(sender_id)
 
+    sender_id
+    |> chosen_word
+    |> build_word_underscores
+    |> merge_underscores_and_drawing(guess_count, guess_flag)
+  end
+
+  #################### INCORRECT GUESS METHODS ####################################
+  defp build_word_underscores(chosen_word) do
+    String.duplicate("_ ", String.length(chosen_word) - 1) <> "_"
+  end
+
+  defp merge_underscores_and_drawing(underscores, guess_count, _guess_flag = :incorrect_guesses) do
+    [drawing | sentence] = Drawings.draw(guess_count)
+    drawing <> " #{underscores}" <> "\n\n" <> hd sentence
+  end
+  #################################################################################
+
+
+  #################### CORRECT GUESS METHODS ####################################
   def get_drawing(guess, guess_flag = :correct_guesses, sender_id) do
     # Correct guess steps
     # Steps: chosen_word = "Anitta", correct_guesses = "An"
@@ -31,7 +45,6 @@ defmodule Tbot.HangmanBuildDrawing do
     #  An _ _ _ _
 
     # Boa! Fale mais uma letra!"
-
     chosen_word = chosen_word(sender_id)
 
     sender_id
@@ -51,7 +64,7 @@ defmodule Tbot.HangmanBuildDrawing do
     end)
   end
 
-  defp merge_underscores_and_drawing(underscores, guess_count, guess_flag = :correct_guesses) do
+  defp merge_underscores_and_drawing(underscores, guess_count, _guess_flag = :correct_guesses) do
     [drawing | _] = Drawings.draw(guess_count)
     drawing <> " #{underscores}" <> "\n\n" <> "Boa! Fale mais uma letra!"
   end
@@ -66,6 +79,7 @@ defmodule Tbot.HangmanBuildDrawing do
 
   map_reduce_string(String.split(guesses, "", trim: true), chosen_word, "")
  end
+ #################################################################################
 
  defp incorrect_guess_count(sender_id) do
    incorrect_guesses =
