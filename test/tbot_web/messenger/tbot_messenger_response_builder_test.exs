@@ -30,7 +30,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message:
@@ -54,7 +54,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message:
@@ -81,7 +81,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message:
@@ -108,7 +108,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message:
@@ -132,7 +132,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message:
@@ -157,7 +157,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message:
@@ -180,7 +180,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
-      %Tbot.MessengerRequestData{
+      %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
         message: "Desculpe, não entendi"

@@ -4,9 +4,9 @@ defmodule Tbot.SyncUserChosenWord do
   and saving in Redis with the set name as the sender_id and the word as one
   of the values
   """
-  alias Tbot.HangmanWord, as: HangmanWord
-  alias Tbot.Redis, as: Redis
-  alias Tbot.Agent, as: Agent
+  alias Tbot.HangmanWord
+  alias Tbot.Redis
+  alias Tbot.Agent
 
   def sync(magic_map) do
     conn = Redis.start_link

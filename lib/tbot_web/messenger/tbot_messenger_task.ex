@@ -4,7 +4,7 @@ defmodule Tbot.MessengerOutputTask do
   sending it back to Messenger's user.
   """
 
-  alias Tbot.MessengerOutput, as: MessengerOutput
+  alias Tbot.MessengerOutput
 
   def respond_messenger(parsed_entry) do
     Task.Supervisor.async_nolink Tbot.TaskSupervisor, fn ->

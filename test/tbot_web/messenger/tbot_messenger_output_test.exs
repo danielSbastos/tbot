@@ -1,14 +1,14 @@
 defmodule TbotWeb.TbotMessengerOutputTest do
   use TbotWeb.ConnCase
 
-  alias Tbot.MessengerOutput, as: MessengerOutput
-  alias Tbot.MessengerRequestData, as: MessengerRequestData
+  alias Tbot.MessengerOutput
+  alias Tbot.HangmanResponseData
 
   import Mock
 
   test "'build_request_body' returns correct text message structure" do
     text = "beam me up, scotty"; sender_id = "12345"
-    message_map = %MessengerRequestData{message: text, sender_id: sender_id, type: "text"}
+    message_map = %HangmanResponseData{message: text, sender_id: sender_id, type: "text"}
     request_body = MessengerOutput.build_request_body(message_map)
 
     assert request_body == %Tbot.MessengerResponseData{
@@ -28,7 +28,7 @@ defmodule TbotWeb.TbotMessengerOutputTest do
     with_mock HTTPotion, [post: fn(_url, _headers_and_body) -> "ok" end] do
 
       text = "beam me up, scotty"; sender_id = "12345"
-      message_map = %MessengerRequestData{message: text, sender_id: sender_id, type: "text"}
+      message_map = %HangmanResponseData{message: text, sender_id: sender_id, type: "text"}
       request_body = MessengerOutput.build_request_body(message_map)
       MessengerOutput.send(request_body)
 

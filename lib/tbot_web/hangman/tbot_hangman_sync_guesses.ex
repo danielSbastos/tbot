@@ -5,7 +5,7 @@ defmodule Tbot.HangmanSyncGuesses do
   guess and if there is no guess, it simply adds
   """
 
-  alias Tbot.Redis, as: Redis
+  alias Tbot.Redis
 
   def update_guesses(guess, guess_flag, sender_id) do
     conn = Redis.start_link
