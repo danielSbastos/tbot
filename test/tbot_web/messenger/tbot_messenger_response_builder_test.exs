@@ -5,7 +5,7 @@ defmodule Tbot.MessengerResponseBuilderTest do
   alias Tbot.Redis, as: Redis
   alias Tbot.Agent, as: Agent
 
-  setup_all do
+  setup do
     {:ok, conn} = Redix.start_link(redis_host())
     Redix.command!(conn, ["FLUSHDB"])
     Redix.stop(conn)
@@ -22,15 +22,16 @@ defmodule Tbot.MessengerResponseBuilderTest do
   end
 
   test "first interaction with magic word", %{conn: conn} do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "oi", type: "text"}
-    save_word_in_redis(conn, "12345", "Anitta")
-    put_word_in_agent("12345", "Anitta")
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "oi", type: "text"}
+    save_word_in_redis(conn, sender_id, "Anitta")
+    put_word_in_agent(sender_id, "Anitta")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message:
           """
@@ -40,22 +41,21 @@ defmodule Tbot.MessengerResponseBuilderTest do
           |
           |
           |
-           _ _ _ _ _ _
+            _ _ _ _ _ _
           """
-          <>
-          "\nVamos lá! Fale a primeira letra!"
       }
   end
 
   test "first guess with correct letter", %{conn: conn} do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "A", type: "text"}
-    save_word_in_redis(conn, "12345", "Anitta")
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "A", type: "text"}
+    save_word_in_redis(conn, sender_id, "Anitta")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message:
           """
@@ -66,48 +66,50 @@ defmodule Tbot.MessengerResponseBuilderTest do
           |
           |
            A _ _ _ _ _
-          """ <> "\nBoa! Fale mais uma letra!"
+          """
       }
   end
 
-  test "third correct guess with two incorrect guesses", %{conn: conn} do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "A", type: "text"}
+  test "fourth correct guess with two incorrect guesses", %{conn: conn} do
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "A", type: "text"}
 
-    save_word_in_redis(conn, "12345", "Anitta")
-    update_redis(conn, "12345", :correct_guesses, "ant")
-    update_redis(conn, "12345", :incorrect_guesses, "wo")
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :correct_guesses, "ant")
+    update_redis(conn, sender_id, :incorrect_guesses, "wo")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message:
           """
           ________
           |      |
+          |      0
+          |     /
           |
           |
-          |
-          |
-           A n _ t _ a
-          """ <> "\nBoa! Fale mais uma letra!"
+           An _tta
+          """
       }
   end
 
   test "fifth incorrect guess with three correct guesses", %{conn: conn} do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "p", type: "text"}
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "p", type: "text"}
 
-    save_word_in_redis(conn, "12345", "Anitta")
-    update_redis(conn, "12345", :correct_guesses, "ant")
-    update_redis(conn, "12345", :incorrect_guesses, "wozr")
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :correct_guesses, "ant")
+    update_redis(conn, sender_id, :incorrect_guesses, "wozr")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message:
           """
@@ -117,20 +119,21 @@ defmodule Tbot.MessengerResponseBuilderTest do
           |     /|\\
           |     /
           |
-           _ n _ t _ a
-          """ <> "\nÚltima chance para acertar!"
+            _n _tta
+          """
       }
   end
 
   test "first guess with incorrect letter", %{conn: conn} do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "w", type: "text"}
-    save_word_in_redis(conn, "12345", "Anitta")
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "w", type: "text"}
+    save_word_in_redis(conn, sender_id, "Anitta")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message:
           """
@@ -140,20 +143,22 @@ defmodule Tbot.MessengerResponseBuilderTest do
           |
           |
           |
-          """ <> "\nVish. Primeiro erro.."
+            _ _ _ _ _ _
+          """
       }
   end
 
   test "fourth guess with incorrect letter", %{conn: conn} do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "p", type: "text"}
-    save_word_in_redis(conn, "12345", "Anitta")
-    update_redis(conn, "12345", :incorrect_guesses, "wdb")
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "p", type: "text"}
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :incorrect_guesses, "wdb")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message:
           """
@@ -163,18 +168,20 @@ defmodule Tbot.MessengerResponseBuilderTest do
           |     /|\\
           |
           |
-          """ <> "\nCara, o boneco vai morrer. Já errou quatro vezes."
+            _ _ _ _ _ _
+          """
       }
   end
 
   test "text with random word" do
-    message_map = %Tbot.MessengerRequestData{sender_id: "12345", message: "a danada sou eu", type: "text"}
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "a danada sou eu", type: "text"}
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
     assert parsed_message ==
       %Tbot.MessengerRequestData{
-        sender_id: "12345",
+        sender_id: sender_id,
         type: "text",
         message: "Desculpe, não entendi"
       }

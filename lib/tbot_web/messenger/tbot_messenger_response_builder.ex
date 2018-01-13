@@ -4,8 +4,8 @@ defmodule Tbot.MessengerResponseBuilder do
   by replacing the message value with the interpreted one by the bot.
   """
 
-  alias Tbot.Redis, as: Redis
-  alias Tbot.Agent, as: Agent
+  alias Tbot.Redis
+  alias Tbot.Agent
   alias Tbot.HangmanSyncGuesses, as: SyncGuesses
   alias Tbot.HangmanBuildDrawing, as: BuildDrawing
 
@@ -16,35 +16,18 @@ defmodule Tbot.MessengerResponseBuilder do
   end
 
   defp define_interaction(text, sender_id) do
-    text = if Agent.alive? do
-      chosen_word = Agent.get(sender_id)
+    if Agent.alive? do
       Agent.stop
-      first_interaction_message(chosen_word, sender_id)
+      first_interaction_message(sender_id)
     else
       check_for_guess(text, sender_id)
     end
   end
 
-  ############# FIRST INTERACTION METHODS #########################
-  # TODO: Move them to "Tbot.HangmanBuildDrawing"
-
-  defp first_interaction_message(chosen_word, sender_id) do
+  defp first_interaction_message(sender_id) do
     SyncGuesses.reset_all_guesses(sender_id)
-    chosen_word
-    |> build_word_underscores
-    |> merge_underscores_and_drawing
+    BuildDrawing.get_drawing_first_interaction(sender_id)
   end
-
-  defp build_word_underscores(chosen_word) do
-    String.duplicate("_ ", String.length(chosen_word) - 1) <> "_"
-  end
-
-  defp merge_underscores_and_drawing(underscores) do
-    [drawing | sentence] = Drawings.draw(0)
-    drawing <> " #{underscores}" <> "\n\n" <> hd sentence
-  end
-
-  ###############################################################
 
   defp check_for_guess(text, sender_id) do
     if String.length(text) == 1 do
@@ -54,7 +37,7 @@ defmodule Tbot.MessengerResponseBuilder do
           false -> :incorrect_guesses
         end
       SyncGuesses.update_guesses(text, guess_flag, sender_id)
-      BuildDrawing.get_drawing(text, guess_flag, sender_id)
+      BuildDrawing.get_drawing(sender_id)
     else
       "Desculpe, não entendi"
     end

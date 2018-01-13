@@ -4,7 +4,7 @@ defmodule Tbot.HangmanBuildDrawingTest do
   alias Tbot.Redis, as: Redis
   alias Tbot.HangmanBuildDrawing, as: BuildDrawing
 
-  setup_all do
+  setup do
     {:ok, conn} = Redix.start_link(redis_host())
     Redix.command!(conn, ["FLUSHDB"])
     Redix.stop(conn)
@@ -21,8 +21,13 @@ defmodule Tbot.HangmanBuildDrawingTest do
   end
 
   test "first guess with correct letter", %{conn: conn} do
-    save_word_in_redis(conn, "12345", "Anitta")
-    update_redis(conn, "12345", :correct_guesses, "A")
+    sender_id = "12345"
+    guess = "A"
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :correct_guesses, guess)
+
+    drawing = BuildDrawing.get_drawing(sender_id)
+
     correct_drawing =
       """
       ________
@@ -32,56 +37,62 @@ defmodule Tbot.HangmanBuildDrawingTest do
       |
       |
        A _ _ _ _ _
-      """ <> "\nBoa! Fale mais uma letra!"
-
-    drawing = BuildDrawing.get_drawing("A", :correct_guesses, "12345")
-
+      """
     assert drawing == correct_drawing
   end
 
-  # test "third correct guess with two incorrect guesses", %{conn: conn} do
-  #   save_word_in_redis(conn, "12345", "Anitta")
-  #   update_redis(conn, "12345", :correct_guesses, "at")
-  #   update_redis(conn, "12345", :incorrect_guesses, "wo")
-  #   correct_drawing =
-  #     """
-  #     ________
-  #     |      |
-  #     |
-  #     |
-  #     |
-  #     |
-  #      A _ _ t _ a
-  #     """ <> "\nBoa! Fale mais uma letra!"
+  test "third correct guess with two incorrect guesses", %{conn: conn} do
+    sender_id = "12345"
+    guess = "A"
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :correct_guesses, guess <> "an")
+    update_redis(conn, sender_id, :incorrect_guesses, "wo")
 
-  #   drawing = BuildDrawing.get_drawing("A", "12345")
+    drawing = BuildDrawing.get_drawing(sender_id)
 
-  #   assert drawing == correct_drawing
-  # end
+    correct_drawing =
+      """
+      ________
+      |      |
+      |      0
+      |     /
+      |
+      |
+       An _ _ _a
+      """
+    assert drawing == correct_drawing
+  end
 
-  # test "fifth incorrect guess with three correct guesses", %{conn: conn} do
-  #   save_word_in_redis(conn, "12345", "Anitta")
-  #   update_redis(conn, "12345", :correct_guesses, "ant")
-  #   update_redis(conn, "12345", :incorrect_guesses, "wozr")
-  #   correct_drawing =
-  #     """
-  #     ________
-  #     |      |
-  #     |      0
-  #     |     /|\\
-  #     |     /
-  #     |
-  #      _ n _ t _ a
-  #     """ <> "\nÚltima chance para acertar!"
+  test "fifth incorrect guess with three correct guesses", %{conn: conn} do
+    sender_id = "12345"
+    guess = "w"
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :correct_guesses, "anA")
+    update_redis(conn, sender_id, :incorrect_guesses, guess <> "pozr")
 
-  #   drawing = BuildDrawing.get_drawing("p", "12345")
+    drawing = BuildDrawing.get_drawing(sender_id)
 
-  #   assert drawing == correct_drawing
-  # end
+    correct_drawing =
+      """
+      ________
+      |      |
+      |      0
+      |     /|\\
+      |     /
+      |
+       An _ _ _a
+      """
+    assert drawing == correct_drawing
+  end
 
   test "first guess with incorrect letter", %{conn: conn} do
-    save_word_in_redis(conn, "12345", "Anitta")
-    update_redis(conn, "12345", :incorrect_guesses, "w")
+    sender_id = "12345"
+    guess = "w"
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :incorrect_guesses, guess)
+
+    drawing = BuildDrawing.get_drawing(sender_id)
+
     correct_drawing =
       """
       ________
@@ -90,31 +101,31 @@ defmodule Tbot.HangmanBuildDrawingTest do
       |
       |
       |
-       _ _ _ _ _ _
-      """ <> "\nVish. Primeiro erro.."
-
-    drawing = BuildDrawing.get_drawing("w", :incorrect_guesses, "12345")
-
+        _ _ _ _ _ _
+      """
     assert drawing == correct_drawing
   end
 
-  # test "fourth guess with incorrect letter", %{conn: conn} do
-  #   save_word_in_redis(conn, "12345", "Anitta")
-  #   update_redis(conn, "12345", :incorrect_guesses, "wdb")
-  #   correct_drawing =
-  #     """
-  #     ________
-  #     |      |
-  #     |      0
-  #     |     /|\\
-  #     |
-  #     |
-  #     """ <> "\nCara, o boneco vai morrer. Já errou quatro vezes."
+  test "fourth guess with incorrect letter", %{conn: conn} do
+    sender_id = "12345"
+    guess = "p"
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :incorrect_guesses, guess <> "wdb")
 
-  #   drawing = BuildDrawing.get_drawing("p", "12345")
+    drawing = BuildDrawing.get_drawing(sender_id)
 
-  #   assert drawing == correct_drawing
-  # end
+    correct_drawing =
+      """
+      ________
+      |      |
+      |      0
+      |     /|\\
+      |
+      |
+        _ _ _ _ _ _
+      """
+    assert drawing == correct_drawing
+  end
 
   defp save_word_in_redis(conn, sender_id, chosen_word) do
     Redis.set(conn, sender_id, :chosen_word, chosen_word)
