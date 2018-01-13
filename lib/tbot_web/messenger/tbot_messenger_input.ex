@@ -1,6 +1,6 @@
 defmodule Tbot.MessengerInput do
-  alias Tbot.MessengerRequestData, as: MessengerRequestData
-  alias Tbot.SyncUserChosenWord, as: SyncUserChosenWord
+  alias Tbot.MessengerRequestData
+  alias Tbot.SyncUserChosenWord
 
   @moduledoc """
   Input module that parses the incoming "entry" key from messenger JSON POST body request

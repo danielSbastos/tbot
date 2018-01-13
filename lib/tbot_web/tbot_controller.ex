@@ -1,9 +1,9 @@
 defmodule TbotWeb.TbotController do
   use TbotWeb, :controller
 
-  alias Tbot.MessengerInput, as: MessengerInput
-  alias Tbot.MessengerResponseBuilder, as: MessengerResponseBuilder
-  alias Tbot.MessengerOutputTask, as: MessengerOutputTask
+  alias Tbot.MessengerInput
+  alias Tbot.MessengerResponseBuilder
+  alias Tbot.MessengerOutputTask
 
   def challenge(conn,
     %{"hub.mode" => "subscribe", "hub.verify_token" => token, "hub.challenge" => challenge}) do

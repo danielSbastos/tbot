@@ -1,12 +1,12 @@
 defmodule Tbot.MessengerOutput do
-  alias Tbot.MessengerResponseData, as: MessengerResponseData
+  alias Tbot.MessengerResponseData
 
   @moduledoc """
   Module responsible for sending POST requests to Messenger's Send API.
 
   Usage example (with MessengerInput):
-    alias Tbot.MessengerInput, as: MessengerInput
-    alias Tbot.MessengerOutput, as: MessengerOutput
+    alias Tbot.MessengerInput
+    alias Tbot.MessengerOutput
 
     ...(get messenger entry key value)
     parsed_entry = MessengerInput.parse_messenger_entry(entry)
@@ -23,7 +23,7 @@ defmodule Tbot.MessengerOutput do
   end
 
   # TODO: Add other pattern matching methods for quick replies and postbacks
-  def build_request_body(%Tbot.MessengerRequestData{
+  def build_request_body(%Tbot.HangmanResponseData{
       message: text_msg, sender_id: recipient_id, type: "text"}) do
 
     message = %MessengerResponseData{message: %{text: text_msg}}

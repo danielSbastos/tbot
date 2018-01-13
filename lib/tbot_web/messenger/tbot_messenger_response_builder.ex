@@ -12,7 +12,7 @@ defmodule Tbot.MessengerResponseBuilder do
   def response_data(
     %Tbot.MessengerRequestData{sender_id: sender_id, message: text, type: type}) do
 
-    %Tbot.MessengerRequestData{sender_id: sender_id, message: define_interaction(text, sender_id), type: type}
+    %Tbot.HangmanResponseData{sender_id: sender_id, message: define_interaction(text, sender_id), type: type}
   end
 
   defp define_interaction(text, sender_id) do
