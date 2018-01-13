@@ -1,6 +1,4 @@
 defmodule Tbot.HangmanWord do
-  alias Tbot.Redis, as: Redis
-
   @moduledoc """
   Module that is responsible for fetching a random english word with Wordnik's api
   and translating it to portuguese with Yandex.

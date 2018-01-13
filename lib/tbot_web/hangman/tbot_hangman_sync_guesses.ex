@@ -7,25 +7,14 @@ defmodule Tbot.HangmanSyncGuesses do
 
   alias Tbot.Redis, as: Redis
 
-  def update_correct_guess(guess_word, sender_id) do
+  def update_guesses(guess, guess_flag, sender_id) do
     conn = Redis.start_link
 
-    existent_correct_guesses = Redis.get_key_value(conn, sender_id, :correct_guesses)
-    if existent_correct_guesses == nil do
-      Redis.set(conn, sender_id, :correct_guesses, guess_word)
+    existent_guesses = Redis.get_key_value(conn, sender_id, guess_flag)
+    if existent_guesses == nil do
+      Redis.set(conn, sender_id, guess_flag, guess)
     else
-      Redis.set(conn, sender_id, :correct_guesses, guess_word <> existent_correct_guesses)
-    end
-  end
-
-  def update_incorrect_guess(guess_word, sender_id) do
-    conn = Redis.start_link
-
-    existent_incorrect_guesses = Redis.get_key_value(conn, sender_id, :incorrect_guesses)
-    if existent_incorrect_guesses == nil do
-      Redis.set(conn, sender_id, :incorrect_guesses, guess_word)
-    else
-      Redis.set(conn, sender_id, :incorrect_guesses, guess_word <> existent_incorrect_guesses)
+      Redis.set(conn, sender_id, guess_flag, guess <> existent_guesses)
     end
   end
 

@@ -1,10 +1,9 @@
 defmodule Tbot.HangmanDrawings do
   @moduledoc """
   Responsible for returning the hangman's drawings corresponding
-  to each guess
+  to each
   """
-  def draw(guess = 0) do
-    [
+  def draw(_guess = 0) do
       """
       ________
       |      |
@@ -12,13 +11,10 @@ defmodule Tbot.HangmanDrawings do
       |
       |
       |
-      """,
-      "Vamos lá! Fale a primeira letra!"
-    ]
+      """
   end
 
-  def draw(guess = 1) do
-    [
+  def draw(_guess = 1) do
       """
       ________
       |      |
@@ -26,13 +22,10 @@ defmodule Tbot.HangmanDrawings do
       |
       |
       |
-      """,
-      "Vish. Primeiro erro.."
-    ]
+      """
   end
 
-  def draw(guess = 2) do
-    [
+  def draw(_guess = 2) do
       """
       ________
       |      |
@@ -40,13 +33,10 @@ defmodule Tbot.HangmanDrawings do
       |     /
       |
       |
-      """,
-      "Tá piorando ein? Segundo erro já"
-    ]
+      """
   end
 
-  def draw(guess = 3) do
-    [
+  def draw(_guess = 3) do
       """
       ________
       |      |
@@ -54,13 +44,10 @@ defmodule Tbot.HangmanDrawings do
       |     /|
       |
       |
-      """,
-      "Melhora aí, cara. Tem mais 2 tentativas..."
-    ]
+      """
   end
 
-  def draw(guess = 4) do
-    [
+  def draw(_guess = 4) do
       """
       ________
       |      |
@@ -68,13 +55,10 @@ defmodule Tbot.HangmanDrawings do
       |     /|\\
       |
       |
-      """,
-      "Cara, o boneco vai morrer. Já errou quatro vezes."
-    ]
+      """
   end
 
-  def draw(guess = 5) do
-    [
+  def draw(_guess = 5) do
       """
       ________
       |      |
@@ -82,13 +66,10 @@ defmodule Tbot.HangmanDrawings do
       |     /|\\
       |     /
       |
-      """,
-      "Última chance para acertar!"
-    ]
+      """
   end
 
-  def draw(guess = 6) do
-    [
+  def draw(_guess = 6) do
       """
       ________
       |      |
@@ -96,8 +77,6 @@ defmodule Tbot.HangmanDrawings do
       |     /|\\
       |     / \\
       |
-      """,
-      "Já era. Ele morreu e você perdeu."
-    ]
+      """
   end
 end

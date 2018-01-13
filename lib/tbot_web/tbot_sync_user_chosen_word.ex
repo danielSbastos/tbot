@@ -13,7 +13,7 @@ defmodule Tbot.SyncUserChosenWord do
     word = HangmanWord.fetch_random_english_word |> HangmanWord.translate_to_portuguese
 
     Agent.start_link
-    Agent.update(magic_map.sender_id, word)
+    Agent.update(magic_map.sender_id, :first_interaction)
 
     Redis.set(conn, magic_map.sender_id, :chosen_word, word)
   end

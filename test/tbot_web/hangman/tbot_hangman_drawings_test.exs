@@ -12,7 +12,6 @@ defmodule Tbot.HangmanDrawingsTest do
   end
 
   defp third_drawing() do
-    [
       """
       ________
       |      |
@@ -20,13 +19,10 @@ defmodule Tbot.HangmanDrawingsTest do
       |     /|
       |
       |
-      """,
-      "Melhora aí, cara. Tem mais 2 tentativas..."
-    ]
+      """
   end
 
   def fifth_drawing() do
-    [
       """
       ________
       |      |
@@ -34,8 +30,6 @@ defmodule Tbot.HangmanDrawingsTest do
       |     /|\\
       |     /
       |
-      """,
-      "Última chance para acertar!"
-    ]
+      """
   end
 end

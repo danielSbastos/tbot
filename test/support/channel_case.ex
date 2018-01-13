@@ -24,10 +24,4 @@ defmodule TbotWeb.ChannelCase do
       @endpoint TbotWeb.Endpoint
     end
   end
-
-
-  setup tags do
-    :ok
-  end
-
 end
