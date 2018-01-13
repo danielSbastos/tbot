@@ -31,15 +31,18 @@ defmodule Tbot.MessengerResponseBuilder do
 
   defp check_for_guess(text, sender_id) do
     if String.length(text) == 1 do
-      guess_flag =
-        case is_guess_in_chosen_word?(text, sender_id) do
-          true -> :correct_guesses
-          false -> :incorrect_guesses
-        end
+      guess_flag = guess_flag(text, sender_id)
       SyncGuesses.update_guesses(text, guess_flag, sender_id)
       BuildDrawing.get_drawing(sender_id)
     else
       "Desculpe, não entendi"
+    end
+  end
+
+  defp guess_flag(text, sender_id) do
+    case is_guess_in_chosen_word?(text, sender_id) do
+      true -> :correct_guesses
+      false -> :incorrect_guesses
     end
   end
 
