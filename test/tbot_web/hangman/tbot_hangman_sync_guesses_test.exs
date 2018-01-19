@@ -69,5 +69,40 @@ defmodule Tbot.HangmanSyncGuessesTest do
     assert Redis.get_key_value(conn, sender_id, :correct_guesses) == ""
   end
 
+  defp stub_random_word_response() do
+    %HTTPotion.Response{
+      body: "{\"id\":349663,\"word\":\"unstepped\"}",
+      headers: %HTTPotion.Headers{
+        hdrs: %{
+          "access-control-allow-headers" => "Origin, X-Atmosphere-tracking-id, X-Atmosphere-Framework, X-Cache-Date, Content-Type, X-Atmosphere-Transport, X-Remote, api_key, auth_token, *",
+          "access-control-allow-methods" => "POST, GET, OPTIONS, PUT, DELETE",
+          "access-control-allow-origin" => "*",
+          "access-control-request-headers" => "Origin, X-Atmosphere-tracking-id, X-Atmosphere-Framework, X-Cache-Date, Content-Type, X-Atmosphere-Transport,  X-Remote, api_key, *",
+          "connection" => "close",
+          "content-type" => "application/json; charset=utf-8",
+          "date" => "Wed, 03 Jan 2018 19:29:45 GMT",
+          "wordnik-api-version" => "4.12.20"
+        }
+      },
+     status_code: 200
+    }
+  end
+
+  defp stub_translation() do
+    %HTTPotion.Response{
+      body: "{\"code\":200,\"lang\":\"en-pt\",\"text\":[\"Mar Adriático\"]}",
+      headers: %HTTPotion.Headers{
+        hdrs: %{
+          "cache-control" => "no-store",
+          "connection" => "keep-alive", "content-length" => "53",
+          "content-type" => "application/json; charset=utf-8",
+          "date" => "Wed, 03 Jan 2018 19:40:48 GMT", "keep-alive" => "timeout=120",
+          "server" => "nginx/1.6.2", "x-content-type-options" => "nosniff"
+        }
+      },
+     status_code: 200
+    }
+  end
+
   defp redis_host(), do: Application.get_env(:tbot, :redis_host)
 end

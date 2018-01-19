@@ -1,9 +1,11 @@
-defmodule Tbot.MessengerResponseBuilderTest do
+defmodule Tbot.HangmanResponseBuilderTest do
   use TbotWeb.ConnCase
 
-  alias Tbot.MessengerResponseBuilder, as: ResponseBuilder
-  alias Tbot.Redis, as: Redis
-  alias Tbot.Agent, as: Agent
+  alias Tbot.HangmanResponseBuilder, as: ResponseBuilder
+  alias Tbot.Redis
+  alias Tbot.Agent
+
+  import Mock
 
   setup do
     {:ok, conn} = Redix.start_link(redis_host())
@@ -183,8 +185,30 @@ defmodule Tbot.MessengerResponseBuilderTest do
       %Tbot.HangmanResponseData{
         sender_id: sender_id,
         type: "text",
-        message: "Desculpe, não entendi"
+        message: "Desculpe, não entendi."
       }
+  end
+
+  test "last possible incorrect guess results in game over and game stopped", %{conn: conn} do
+    sender_id = "12345"
+    message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "m", type: "text"}
+    save_word_in_redis(conn, sender_id, "Anitta")
+    update_redis(conn, sender_id, :incorrect_guesses, "woldb")
+
+    with_mock HTTPotion, [
+      get: fn(_url) -> stub_random_word_response() end,
+      post: fn(_url, _body_and_headers) -> stub_translation() end
+    ] do
+
+      parsed_message = ResponseBuilder.response_data(message_map)
+
+      assert parsed_message ==
+        %Tbot.HangmanResponseData{
+          sender_id: sender_id,
+          type: "text",
+          message: "Fim de jogo. Você perdeu. Por favor, recomece outra sessão mandando um 'oi'."
+        }
+    end
   end
 
   defp save_word_in_redis(conn, sender_id, chosen_word) do
@@ -198,6 +222,41 @@ defmodule Tbot.MessengerResponseBuilderTest do
   defp put_word_in_agent(sender_id, chosen_word) do
     Agent.start_link
     Agent.update(sender_id, chosen_word)
+  end
+
+  defp stub_random_word_response() do
+    %HTTPotion.Response{
+      body: "{\"id\":349663,\"word\":\"unstepped\"}",
+      headers: %HTTPotion.Headers{
+        hdrs: %{
+          "access-control-allow-headers" => "Origin, X-Atmosphere-tracking-id, X-Atmosphere-Framework, X-Cache-Date, Content-Type, X-Atmosphere-Transport, X-Remote, api_key, auth_token, *",
+          "access-control-allow-methods" => "POST, GET, OPTIONS, PUT, DELETE",
+          "access-control-allow-origin" => "*",
+          "access-control-request-headers" => "Origin, X-Atmosphere-tracking-id, X-Atmosphere-Framework, X-Cache-Date, Content-Type, X-Atmosphere-Transport,  X-Remote, api_key, *",
+          "connection" => "close",
+          "content-type" => "application/json; charset=utf-8",
+          "date" => "Wed, 03 Jan 2018 19:29:45 GMT",
+          "wordnik-api-version" => "4.12.20"
+        }
+      },
+     status_code: 200
+    }
+  end
+
+  defp stub_translation() do
+    %HTTPotion.Response{
+      body: "{\"code\":200,\"lang\":\"en-pt\",\"text\":[\"Mar Adriático\"]}",
+      headers: %HTTPotion.Headers{
+        hdrs: %{
+          "cache-control" => "no-store",
+          "connection" => "keep-alive", "content-length" => "53",
+          "content-type" => "application/json; charset=utf-8",
+          "date" => "Wed, 03 Jan 2018 19:40:48 GMT", "keep-alive" => "timeout=120",
+          "server" => "nginx/1.6.2", "x-content-type-options" => "nosniff"
+        }
+      },
+     status_code: 200
+    }
   end
 
   defp redis_host(), do: Application.get_env(:tbot, :redis_host)

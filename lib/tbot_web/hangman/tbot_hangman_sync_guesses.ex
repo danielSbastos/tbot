@@ -6,6 +6,7 @@ defmodule Tbot.HangmanSyncGuesses do
   """
 
   alias Tbot.Redis
+  alias Tbot.HangmanWord, as: NewChosenWord
 
   def update_guesses(guess, guess_flag, sender_id) do
     conn = Redis.start_link
@@ -16,6 +17,15 @@ defmodule Tbot.HangmanSyncGuesses do
     else
       Redis.set(conn, sender_id, guess_flag, guess <> existent_guesses)
     end
+  end
+
+  def start_new_session(sender_id) do
+    new_chosen_word =
+      NewChosenWord.fetch_random_english_word
+      |> NewChosenWord.translate_to_portuguese
+
+    Redis.start_link
+      |> Redis.set(sender_id, new_chosen_word, :chosen_word)
   end
 
   def reset_all_guesses(sender_id) do
