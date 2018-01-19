@@ -25,7 +25,7 @@ config :tbot,
   messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN"),
   yandex_api_key: System.get_env("YANDEX_API_KEY"),
   wordnik_api_key: System.get_env("WORDNIK_API_KEY"),
-  redis_host: System.get_env("REDIS_HOST")
+  redis_host: System.get_env("REDIS_URL")
 
 # Do not print debug messages in production
 config :logger, level: :info
