@@ -30,14 +30,18 @@ defmodule Tbot.HangmanResponseBuilder do
     if String.length(text) == 1 do
       SyncGuesses.update_guesses(text, guess_flag(text, sender_id), sender_id)
       case incorrect_guess_count(sender_id) do
-        6 ->
-          SyncGuesses.start_new_session(sender_id)
-          "Fim de jogo. Você perdeu. Por favor, recomece outra sessão mandando um 'oi'."
+        6 -> end_of_game_actions_and_message(sender_id)
         _ -> BuildDrawing.get_drawing(sender_id)
       end
     else
       "Desculpe, não entendi."
     end
+  end
+
+  defp end_of_game_actions_and_message(sender_id) do
+    SyncGuesses.reset_all_guesses(sender_id)
+    SyncGuesses.reset_chosen_word(sender_id)
+    "Fim de jogo. Você perdeu. Por favor, recomece outra sessão mandando um 'oi'."
   end
 
   defp incorrect_guess_count(sender_id) do

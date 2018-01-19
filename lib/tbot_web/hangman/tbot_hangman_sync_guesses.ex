@@ -19,13 +19,8 @@ defmodule Tbot.HangmanSyncGuesses do
     end
   end
 
-  def start_new_session(sender_id) do
-    new_chosen_word =
-      NewChosenWord.fetch_random_english_word
-      |> NewChosenWord.translate_to_portuguese
-
-    Redis.start_link
-      |> Redis.set(sender_id, new_chosen_word, :chosen_word)
+  def reset_chosen_word(sender_id) do
+    Redis.start_link |> Redis.set(sender_id, :chosen_word, "")
   end
 
   def reset_all_guesses(sender_id) do
