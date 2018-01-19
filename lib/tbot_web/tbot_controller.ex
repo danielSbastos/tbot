@@ -2,7 +2,7 @@ defmodule TbotWeb.TbotController do
   use TbotWeb, :controller
 
   alias Tbot.MessengerInput
-  alias Tbot.MessengerResponseBuilder
+  alias Tbot.HangmanResponseBuilder
   alias Tbot.MessengerOutputTask
 
   def challenge(conn,
@@ -17,7 +17,7 @@ defmodule TbotWeb.TbotController do
 
   def webhook(conn, %{"entry" => entry, "object" => "page"}) do
     parsed_entry = MessengerInput.parse_messenger_entry(entry)
-    body = MessengerResponseBuilder.response_data(parsed_entry)
+    body = HangmanResponseBuilder.response_data(parsed_entry)
     MessengerOutputTask.respond_messenger(body)
 
     conn |> send_resp(200, "ok")
