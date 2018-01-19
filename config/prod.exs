@@ -23,8 +23,8 @@ config :tbot, TbotWeb.Endpoint,
 config :tbot,
   messenger_verify_token: System.get_env("MESSENGER_VERIFY_TOKEN"),
   messenger_page_token: System.get_env("MESSENGER_PAGE_TOKEN"),
-  yandex_api_key: System.get_env("YANDEX_API_KEY")
-  wordnik_api_key: System.get_env("WORDNIK_API_KEY")
+  yandex_api_key: System.get_env("YANDEX_API_KEY"),
+  wordnik_api_key: System.get_env("WORDNIK_API_KEY"),
   redis_host: System.get_env("REDIS_HOST")
 
 # Do not print debug messages in production
