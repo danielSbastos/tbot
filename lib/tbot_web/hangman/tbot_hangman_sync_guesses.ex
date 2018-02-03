@@ -6,7 +6,6 @@ defmodule Tbot.HangmanSyncGuesses do
   """
 
   alias Tbot.Redis
-  alias Tbot.HangmanWord, as: NewChosenWord
 
   def update_guesses(guess, guess_flag, sender_id) do
     existent_guesses = Redis.get_key_value(sender_id, guess_flag)

@@ -30,9 +30,10 @@ defmodule Tbot.Application do
   end
 
   defp redis_pool() do
-    pool_size = Application.get_env(:tbot, :redis_pool_size)
-    redix_workers = for i <- 0..(pool_size - 1) do
+    for i <- 0..(redis_pool_size() - 1) do
       worker(Redix, [[], [name: :"redix_#{i}"]], id: {Redix, i})
     end
   end
+
+  defp redis_pool_size(), do: Application.get_env(:tbot, :redis_pool_size)
 end
