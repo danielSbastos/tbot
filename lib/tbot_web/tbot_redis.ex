@@ -23,5 +23,4 @@ defmodule Tbot.Redis do
   end
 
   defp redis_pool_size(), do: Application.get_env(:tbot, :redis_pool_size)
-  defp redis_host(), do: Application.get_env(:tbot, :redis_host)
 end

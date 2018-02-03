@@ -13,8 +13,18 @@ config :tbot, TbotWeb.Endpoint,
   pubsub: [name: Tbot.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+
+pool_size = fn () ->
+  env_pool_size = System.get_env("REDIS_POOL_SIZE")
+  pool_size = case env_pool_size do
+    nil -> 50
+    ""  -> 50
+    _ -> Integer.parse(env_pool_size)
+  end
+end
+
 config :tbot,
-  redis_pool_size: System.get_env("REDIS_POOL_SIZE") || 50
+  redis_pool_size: pool_size.()
 
 # Configures Elixir's Logger
 config :logger, :console,
