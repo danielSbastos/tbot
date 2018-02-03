@@ -31,7 +31,7 @@ defmodule Tbot.Application do
 
   defp redis_pool() do
     for i <- 0..(redis_pool_size() - 1) do
-      worker(Redix, [[host: redis_host()], [name: :"redix_#{i}"]], id: {Redix, i})
+      worker(Redix, [redis_host(), [name: :"redix_#{i}"]], id: {Redix, i})
     end
   end
 

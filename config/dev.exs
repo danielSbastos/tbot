@@ -49,6 +49,6 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 config :tbot,
-  redis_host: "redis://localhost"
+  redis_host: "redis://localhost:6379/2"
 
 import_config "dev.secret.exs"
