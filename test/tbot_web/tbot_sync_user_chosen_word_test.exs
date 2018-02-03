@@ -2,13 +2,12 @@ defmodule Tbot.SyncUserChosenWordTest do
   use TbotWeb.ConnCase
 
   alias Tbot.SyncUserChosenWord, as: SyncUserChosenWord
+  alias Tbot.Redis
 
   import Mock
 
-  setup_all do
-    {:ok, conn} = Redix.start_link(redis_host())
-    Redix.command!(conn, ["FLUSHDB"])
-    Redix.stop(conn)
+  setup do
+    Redis.command(["FLUSHDB"])
     :ok
   end
 
@@ -22,8 +21,7 @@ defmodule Tbot.SyncUserChosenWordTest do
 
       assert sync == {:ok, 1}
 
-      {:ok, conn} = Redix.start_link(redis_host())
-      assert Redix.command(conn, ["HGETALL", "12345"]) == {:ok, ["chosen_word", "Mar Adriático"]}
+      assert Redis.get_members("12345") == ["chosen_word", "Mar Adriático"]
     end
   end
 
@@ -61,6 +59,4 @@ defmodule Tbot.SyncUserChosenWordTest do
      status_code: 200
     }
   end
-
-  defp redis_host(), do: Application.get_env(:tbot, :redis_host)
 end

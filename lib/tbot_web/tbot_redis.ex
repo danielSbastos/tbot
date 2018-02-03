@@ -14,6 +14,10 @@ defmodule Tbot.Redis do
     value
   end
 
+  def command(command) do
+    {:ok, value} = Redix.command(:"redix_#{random_index()}", command)
+  end
+
   defp random_index() do
     rem(System.unique_integer([:positive]), redis_pool_size())
   end
