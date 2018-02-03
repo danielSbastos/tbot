@@ -2,7 +2,7 @@
 [![Codebeat](https://codebeat.co/badges/42c9fe03-e8ba-469e-8b14-3282f5361b83)](https://codebeat.co/projects/github-com-danielsbastos-tbot-master)
 [![CircleCI](https://circleci.com/gh/danielSbastos/tbot/tree/master.svg?style=shield&circle-token=350e60ec92fa8686df6b34c07242545a7d7a1e15)](https://circleci.com/gh/danielSbastos/tbot/tree/master)
 
-**IMPORTTANT:** Don't deploy if this message is still here. Redis is opening up too many connections in production but not closing them, which in turn leads to the shutting down of some. I'm still learning the reasons and how to solve this problem.
+**IMPORTANT:** Don't deploy if this message is still here. Redis is opening up too many connections in production but not closing them, which in turn leads to the shutting down of some. I'm still learning the reasons and how to solve this problem.
 
 # Tbot
 
