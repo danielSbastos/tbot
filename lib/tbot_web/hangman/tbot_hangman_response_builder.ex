@@ -45,9 +45,7 @@ defmodule Tbot.HangmanResponseBuilder do
   end
 
   defp incorrect_guess_count(sender_id) do
-    incorrect_guesses =
-      Redis.start_link
-      |> Redis.get_key_value(sender_id, :incorrect_guesses)
+    incorrect_guesses = Redis.get_key_value(sender_id, :incorrect_guesses)
 
     case incorrect_guesses do
       nil -> 0
@@ -63,7 +61,6 @@ defmodule Tbot.HangmanResponseBuilder do
   end
 
   defp is_guess_in_chosen_word?(text, sender_id) do
-    chosen_word = Redis.start_link |> Redis.get_key_value(sender_id, :chosen_word)
-    chosen_word =~ text
+    Redis.get_key_value(sender_id, :chosen_word) =~ text
   end
 end

@@ -67,18 +67,16 @@ defmodule Tbot.HangmanBuildDrawing do
     drawing <> " #{underscores}\n"
   end
 
- defp chosen_word_and_guesses_subtraction(sender_id, chosen_word) do
-  # Exaplanation: for a string of random or not-random substrings of a string, remove them form the string
-  # Example: remove "tin" from "Anitta"
-  # Result: "Aa"
-  correct_guesses = correct_guesses(sender_id)
-  map_reduce_string(String.split(correct_guesses, "", trim: true), chosen_word, "")
- end
+  defp chosen_word_and_guesses_subtraction(sender_id, chosen_word) do
+    # Exaplanation: for a string of random or not-random substrings of a string, remove them form the string
+    # Example: remove "tin" from "Anitta"
+    # Result: "Aa"
+    correct_guesses = correct_guesses(sender_id)
+    map_reduce_string(String.split(correct_guesses, "", trim: true), chosen_word, "")
+  end
 
- defp incorrect_guess_count(sender_id) do
-  incorrect_guesses =
-    Redis.start_link
-    |> Redis.get_key_value(sender_id, :incorrect_guesses)
+  defp incorrect_guess_count(sender_id) do
+    incorrect_guesses = Redis.get_key_value(sender_id, :incorrect_guesses)
 
     case incorrect_guesses do
       nil -> 0
@@ -87,9 +85,7 @@ defmodule Tbot.HangmanBuildDrawing do
   end
 
   defp correct_guesses(sender_id) do
-    correct_guesses =
-      Redis.start_link
-      |> Redis.get_key_value(sender_id, :correct_guesses)
+    correct_guesses = Redis.get_key_value(sender_id, :correct_guesses)
 
     case correct_guesses do
       nil -> ""
@@ -98,7 +94,6 @@ defmodule Tbot.HangmanBuildDrawing do
   end
 
   defp chosen_word(sender_id) do
-    Redis.start_link
-    |> Redis.get_key_value(sender_id, :chosen_word)
+    Redis.get_key_value(sender_id, :chosen_word)
   end
 end

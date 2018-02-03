@@ -8,25 +8,14 @@ defmodule Tbot.HangmanResponseBuilderTest do
   import Mock
 
   setup do
-    {:ok, conn} = Redix.start_link(redis_host())
-    Redix.command!(conn, ["FLUSHDB"])
-    Redix.stop(conn)
+    Redis.command(["FLUSHDB"])
     :ok
   end
 
-  setup context do
-    if context[:no_setup] do
-      {:ok, %{}}
-    else
-      {:ok, conn} = Redix.start_link(redis_host())
-      {:ok, %{conn: conn}}
-    end
-  end
-
-  test "first interaction with magic word", %{conn: conn} do
+  test "first interaction with magic word" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "oi", type: "text"}
-    save_word_in_redis(conn, sender_id, "Anitta")
+    save_word_in_redis(sender_id, "Anitta")
     put_word_in_agent(sender_id, "Anitta")
 
     parsed_message = ResponseBuilder.response_data(message_map)
@@ -48,10 +37,10 @@ defmodule Tbot.HangmanResponseBuilderTest do
       }
   end
 
-  test "first guess with correct letter", %{conn: conn} do
+  test "first guess with correct letter" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "A", type: "text"}
-    save_word_in_redis(conn, sender_id, "Anitta")
+    save_word_in_redis(sender_id, "Anitta")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
@@ -72,13 +61,13 @@ defmodule Tbot.HangmanResponseBuilderTest do
       }
   end
 
-  test "fourth correct guess with two incorrect guesses", %{conn: conn} do
+  test "fourth correct guess with two incorrect guesses" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "A", type: "text"}
 
-    save_word_in_redis(conn, sender_id, "Anitta")
-    update_redis(conn, sender_id, :correct_guesses, "ant")
-    update_redis(conn, sender_id, :incorrect_guesses, "wo")
+    save_word_in_redis(sender_id, "Anitta")
+    update_redis(sender_id, :correct_guesses, "ant")
+    update_redis(sender_id, :incorrect_guesses, "wo")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
@@ -99,13 +88,13 @@ defmodule Tbot.HangmanResponseBuilderTest do
       }
   end
 
-  test "fifth incorrect guess with three correct guesses", %{conn: conn} do
+  test "fifth incorrect guess with three correct guesses" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "p", type: "text"}
 
-    save_word_in_redis(conn, sender_id, "Anitta")
-    update_redis(conn, sender_id, :correct_guesses, "ant")
-    update_redis(conn, sender_id, :incorrect_guesses, "wozr")
+    save_word_in_redis(sender_id, "Anitta")
+    update_redis(sender_id, :correct_guesses, "ant")
+    update_redis(sender_id, :incorrect_guesses, "wozr")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
@@ -126,10 +115,10 @@ defmodule Tbot.HangmanResponseBuilderTest do
       }
   end
 
-  test "first guess with incorrect letter", %{conn: conn} do
+  test "first guess with incorrect letter" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "w", type: "text"}
-    save_word_in_redis(conn, sender_id, "Anitta")
+    save_word_in_redis(sender_id, "Anitta")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
@@ -150,11 +139,11 @@ defmodule Tbot.HangmanResponseBuilderTest do
       }
   end
 
-  test "fourth guess with incorrect letter", %{conn: conn} do
+  test "fourth guess with incorrect letter" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "p", type: "text"}
-    save_word_in_redis(conn, sender_id, "Anitta")
-    update_redis(conn, sender_id, :incorrect_guesses, "wdb")
+    save_word_in_redis(sender_id, "Anitta")
+    update_redis(sender_id, :incorrect_guesses, "wdb")
 
     parsed_message = ResponseBuilder.response_data(message_map)
 
@@ -189,11 +178,11 @@ defmodule Tbot.HangmanResponseBuilderTest do
       }
   end
 
-  test "last possible incorrect guess results in game over and game stopped", %{conn: conn} do
+  test "last possible incorrect guess results in game over and game stopped" do
     sender_id = "12345"
     message_map = %Tbot.MessengerRequestData{sender_id: sender_id, message: "m", type: "text"}
-    save_word_in_redis(conn, sender_id, "Anitta")
-    update_redis(conn, sender_id, :incorrect_guesses, "woldb")
+    save_word_in_redis(sender_id, "Anitta")
+    update_redis(sender_id, :incorrect_guesses, "woldb")
 
     with_mock HTTPotion, [
       get: fn(_url) -> stub_random_word_response() end,
@@ -211,12 +200,12 @@ defmodule Tbot.HangmanResponseBuilderTest do
     end
   end
 
-  defp save_word_in_redis(conn, sender_id, chosen_word) do
-    Redis.set(conn, sender_id, :chosen_word, chosen_word)
+  defp save_word_in_redis(sender_id, chosen_word) do
+    Redis.set(sender_id, :chosen_word, chosen_word)
   end
 
-  defp update_redis(conn, sender_id, key, value) do
-    Redis.set(conn, sender_id, key, value)
+  defp update_redis(sender_id, key, value) do
+    Redis.set(sender_id, key, value)
   end
 
   defp put_word_in_agent(sender_id, chosen_word) do
@@ -258,6 +247,4 @@ defmodule Tbot.HangmanResponseBuilderTest do
      status_code: 200
     }
   end
-
-  defp redis_host(), do: Application.get_env(:tbot, :redis_host)
 end

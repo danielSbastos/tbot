@@ -13,6 +13,9 @@ config :tbot, TbotWeb.Endpoint,
   pubsub: [name: Tbot.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :tbot,
+  redis_pool_size: System.get_env("REDIS_POOL_SIZE") || 50
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
