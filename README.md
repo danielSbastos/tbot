@@ -13,6 +13,7 @@ A hangman bot,
 - [Development](#development)
 - [Tests](#tests)
 - [Code Quality](#code-quality)
+- [TODO](#todo)
 
 
 ## Dependencies
@@ -89,3 +90,7 @@ Code lintage and quality analysis is done via [credo](https://github.com/rrrene/
 ```sh
 $ mix credo
 ```
+
+## TODO
+
+[ ] Add success message when user wins
