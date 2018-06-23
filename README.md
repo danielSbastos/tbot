@@ -4,6 +4,10 @@
 
 # Tbot
 
+A hangman bot,
+
+![tbot](https://media.giphy.com/media/ZcLCMyeXiHiZKXXEBA/giphy.gif)
+
 - [Dependencies](#dependencies)
 - [Setup](#setup)
 - [Development](#development)
